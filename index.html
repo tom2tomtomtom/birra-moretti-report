@@ -210,31 +210,6 @@
   .route-score-display .big { font-size: 48px; font-weight: bold; line-height: 1; }
   .route-score-display .small { font-size: 12px; opacity: 0.7; }
 
-  /* ── TIKTOK CONTENT CARDS ── */
-  .tiktok-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-  .tt-card {
-    background: #fff; border-radius: 16px; overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s;
-    text-decoration: none; color: inherit; display: block;
-  }
-  .tt-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
-  .tt-thumb {
-    width: 100%; height: 200px; object-fit: cover; background: #1A1A1A;
-    display: block;
-  }
-  .tt-thumb-placeholder {
-    width: 100%; height: 200px; background: linear-gradient(135deg, #1A1A1A, #333);
-    display: flex; align-items: center; justify-content: center; color: #fff; font-size: 40px;
-  }
-  .tt-body { padding: 16px; }
-  .tt-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-  .tt-platform { background: #000; color: #fff; font-size: 10px; font-weight: bold; padding: 2px 8px; border-radius: 4px; }
-  .tt-user { font-size: 12px; color: #888; }
-  .tt-text { font-size: 13px; color: #333; margin-bottom: 12px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .tt-stats { display: flex; gap: 12px; font-size: 11px; color: #888; flex-wrap: wrap; }
-  .tt-stat { display: flex; align-items: center; gap: 3px; }
-  .tt-link { font-size: 11px; font-weight: bold; color: var(--moretti-red); margin-top: 10px; display: block; }
-
   /* ── COMPARISON TABLE ── */
   .comp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
   .comp-table th { background: var(--moretti-dark); color: #fff; padding: 12px 16px; text-align: left; font-size: 12px; letter-spacing: 0.5px; }
@@ -378,7 +353,6 @@
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-q3" onclick="showTab('q3',this)">Q3: Moretti vs Competitors</button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-tensions" onclick="showTab('tensions',this)">Cultural Tensions</button>
     <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-routes" onclick="showTab('routes',this)">Creative Routes</button>
-    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-social" onclick="showTab('social',this)">Social Signals</button>
   </div>
 </div>
 
@@ -1337,181 +1311,6 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════
-     SOCIAL SIGNALS
-════════════════════════════════════════════════════ -->
-<div id="panel-social" class="panel" role="tabpanel">
-  <div class="section-label">LIVE SOCIAL INTELLIGENCE</div>
-  <h2 class="section-title">Social Media Signal — Relevant TikTok Content</h2>
-  <p class="section-sub">Real posts from the slow living / cozy / table connection territory — showing the cultural momentum</p>
-
-  <!-- Research Data Summary -->
-  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px;">
-    <div style="background:#fff; border-radius:12px; padding:16px; text-align:center; box-shadow:0 2px 12px rgba(0,0,0,0.06); border-top:3px solid #C41E3A;">
-      <div style="font-size:34px; font-weight:bold; color:#C41E3A; line-height:1;">0</div>
-      <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#888; margin-top:4px;">Moretti mentions in 1,000+ TikTok items</div>
-    </div>
-    <div style="background:#fff; border-radius:12px; padding:16px; text-align:center; box-shadow:0 2px 12px rgba(0,0,0,0.06); border-top:3px solid #C41E3A;">
-      <div style="font-size:34px; font-weight:bold; color:#C41E3A; line-height:1;">0</div>
-      <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#888; margin-top:4px;">Moretti mentions in 100 Reddit posts</div>
-    </div>
-    <div style="background:#fff; border-radius:12px; padding:16px; text-align:center; box-shadow:0 2px 12px rgba(0,0,0,0.06); border-top:3px solid #D4A843;">
-      <div style="font-size:34px; font-weight:bold; color:#B8860B; line-height:1;">10.2K</div>
-      <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#888; margin-top:4px;">TikTok plays — Italian communal dining</div>
-    </div>
-    <div style="background:#fff; border-radius:12px; padding:16px; text-align:center; box-shadow:0 2px 12px rgba(0,0,0,0.06); border-top:3px solid #2563EB;">
-      <div style="font-size:34px; font-weight:bold; color:#2563EB; line-height:1;">88%</div>
-      <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#888; margin-top:4px;">Stella 1-star reviews — category is in flux</div>
-    </div>
-  </div>
-
-  <div class="info-box insight" style="margin-bottom:24px;">
-    <span class="icon">📊</span>
-    <div><strong>What this tells us:</strong> The slow living aesthetic is generating massive organic content on TikTok — with posts in this category regularly reaching 100K–1.5M+ views. This isn't a niche movement; it's mainstream. UK creator @cosyvera is among the most engaged. The visual language of these posts (warm light, kitchens, still moments) maps directly onto the Italian table aesthetic Moretti could own.</div>
-  </div>
-
-  <div class="tiktok-grid">
-
-    <!-- TikTok 1 — High performer -->
-    <a class="tt-card" href="https://www.tiktok.com/@eklipsu/video/7372543149480086816" target="_blank" rel="noopener">
-      <img class="tt-thumb" src="https://p19-common-sign.tiktokcdn-us.com/tos-useast2a-p-0037-euttp/9f8e16ccea154cd8a5684928f5480fa9_1716553978~tplv-tiktokx-origin.image" alt="Slow living home aesthetic" loading="lazy" onerror="this.style.display='none'"/>
-      <div class="tt-body">
-        <div class="tt-meta">
-          <span class="tt-platform">TikTok</span>
-          <span class="tt-user">@eklipsu (Portugal→UK)</span>
-        </div>
-        <div class="tt-text">Soft girl aesthetic, slowliving, romanticize your life, home aesthetic — cozy living from Portugal-to-UK</div>
-        <div style="margin-bottom:8px;"><span class="pill neutral" style="font-size:10px;">Route 1: Slow Life</span></div>
-        <div class="tt-stats">
-          <span class="tt-stat">👁 1.5M views</span>
-          <span class="tt-stat">❤️ 182.5K likes</span>
-          <span class="tt-stat">💬 1,726 comments</span>
-          <span class="tt-stat">↗️ 7.3K shares</span>
-        </div>
-        <span class="tt-link">View on TikTok →</span>
-      </div>
-    </a>
-
-    <!-- TikTok 2 — Nature/slow -->
-    <a class="tt-card" href="https://www.tiktok.com/@another_cat_mommy/video/7236742817744194843" target="_blank" rel="noopener">
-      <img class="tt-thumb" src="https://p16-common-sign.tiktokcdn-us.com/tos-useast2a-p-0037-aiso/oIXE0BuRyJhD3uDuAFfhomzMCNAITsSIE2N3nw~tplv-tiktokx-origin.image" alt="Aesthetic slow nature" loading="lazy" onerror="this.style.display='none'"/>
-      <div class="tt-body">
-        <div class="tt-meta">
-          <span class="tt-platform">TikTok</span>
-          <span class="tt-user">@another_cat_mommy</span>
-        </div>
-        <div class="tt-text">Aesthetic nature, slow living, meditation, beautiful places, peaceful life — nature slowlife content</div>
-        <div style="margin-bottom:8px;"><span class="pill neutral" style="font-size:10px;">Route 1: Slow Life</span> <span class="pill neutral" style="font-size:10px;">Route 3: Authenticity</span></div>
-        <div class="tt-stats">
-          <span class="tt-stat">👁 896.2K views</span>
-          <span class="tt-stat">❤️ 25.3K likes</span>
-          <span class="tt-stat">💬 162 comments</span>
-          <span class="tt-stat">↗️ 8.6K shares</span>
-        </div>
-        <span class="tt-link">View on TikTok →</span>
-      </div>
-    </a>
-
-    <!-- TikTok 3 — UK cozy creator -->
-    <a class="tt-card" href="https://www.tiktok.com/@cosyvera/video/7606046269420752150" target="_blank" rel="noopener">
-      <img class="tt-thumb" src="https://p19-common-sign.tiktokcdn-us.com/tos-no1a-p-0037-no/oohzkFDTREF23IYhEOEE5nBAGBegsvWdjpfgj2~tplv-tiktokx-origin.image" alt="Cozy UK slow life" loading="lazy" onerror="this.style.display='none'"/>
-      <div class="tt-body">
-        <div class="tt-meta">
-          <span class="tt-platform">TikTok</span>
-          <span class="tt-user">@cosyvera 📍UK</span>
-          <span style="font-size:10px; background:#f0f0f0; padding:2px 6px; border-radius:3px;">UK CREATOR</span>
-        </div>
-        <div class="tt-text">"This & nowhere to be." #slowlife #cozyaesthetic — romantic heirloom nostalgia, cosy kitchen, cozy UK home</div>
-        <div style="margin-bottom:8px;"><span class="pill neutral" style="font-size:10px;">Route 1: Slow Life</span> <span class="pill neutral" style="font-size:10px;">Route 2: Table Connection</span></div>
-        <div class="tt-stats">
-          <span class="tt-stat">👁 175.5K views</span>
-          <span class="tt-stat">❤️ 40.6K likes</span>
-          <span class="tt-stat">💬 160 comments</span>
-          <span class="tt-stat">↗️ 1.4K shares</span>
-        </div>
-        <span class="tt-link">View on TikTok →</span>
-      </div>
-    </a>
-
-    <!-- TikTok 4 — Slow Sunday cottage -->
-    <a class="tt-card" href="https://www.tiktok.com/@lenas_cozy_cottage/video/7565549704168115478" target="_blank" rel="noopener">
-      <img class="tt-thumb" src="https://p16-common-sign.tiktokcdn-us.com/tos-no1a-p-0037-no/osxRfFDFQLDEUnoAfIAAQbMFPjeutQhr2zxjIO~tplv-tiktokx-origin.image" alt="Slow Sunday cozy cottage" loading="lazy" onerror="this.style.display='none'"/>
-      <div class="tt-body">
-        <div class="tt-meta">
-          <span class="tt-platform">TikTok</span>
-          <span class="tt-user">@lenas_cozy_cottage (74.2K followers)</span>
-        </div>
-        <div class="tt-text">Slow Sunday — cottage core, cozy corner, vintage style — 74K followers dedicated to slow cottage living</div>
-        <div style="margin-bottom:8px;"><span class="pill neutral" style="font-size:10px;">Route 1: Slow Life</span> <span class="pill neutral" style="font-size:10px;">Route 3: Authenticity</span></div>
-        <div class="tt-stats">
-          <span class="tt-stat">👁 66.3K views</span>
-          <span class="tt-stat">❤️ 7.9K likes</span>
-          <span class="tt-stat">💬 77 comments</span>
-          <span class="tt-stat">↗️ 517 shares</span>
-        </div>
-        <span class="tt-link">View on TikTok →</span>
-      </div>
-    </a>
-
-    <!-- TikTok 5 — Slow cottage days -->
-    <a class="tt-card" href="https://www.tiktok.com/@ana_explorando/video/7522269652899073335" target="_blank" rel="noopener">
-      <img class="tt-thumb" src="https://p19-common-sign.tiktokcdn-us.com/tos-useast5-p-0068-tx/oIvHIArsPkABuQQQDyW8HEACfelADGImjAMeIh~tplv-tiktokx-origin.image" alt="Slow cottage days" loading="lazy" onerror="this.style.display='none'"/>
-      <div class="tt-body">
-        <div class="tt-meta">
-          <span class="tt-platform">TikTok</span>
-          <span class="tt-user">@ana_explorando (21.4K followers)</span>
-        </div>
-        <div class="tt-text">Slow cottage days — cottagecore, slowliving, quiet life aesthetic</div>
-        <div style="margin-bottom:8px;"><span class="pill neutral" style="font-size:10px;">Route 1: Slow Life</span></div>
-        <div class="tt-stats">
-          <span class="tt-stat">👁 56.1K views</span>
-          <span class="tt-stat">❤️ 5.3K likes</span>
-          <span class="tt-stat">💬 53 comments</span>
-          <span class="tt-stat">↗️ 291 shares</span>
-        </div>
-        <span class="tt-link">View on TikTok →</span>
-      </div>
-    </a>
-
-    <!-- TikTok 6 — Mom slow living -->
-    <a class="tt-card" href="https://www.tiktok.com/@alllyheilig/video/7609511616547212575" target="_blank" rel="noopener">
-      <img class="tt-thumb" src="https://p16-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/oIaAwBaZlAAjoiUAkiqtC5JEwEaAvBp34R7VI~tplv-tiktokx-origin.image" alt="Slow living as mom" loading="lazy" onerror="this.style.display='none'"/>
-      <div class="tt-body">
-        <div class="tt-meta">
-          <span class="tt-platform">TikTok</span>
-          <span class="tt-user">@alllyheilig</span>
-        </div>
-        <div class="tt-text">Slow living as a mom of littles — "A gentle life, on purpose." #slowliving #softlife #motherhood</div>
-        <div style="margin-bottom:8px;"><span class="pill neutral" style="font-size:10px;">Route 1: Slow Life</span> <span class="pill neutral" style="font-size:10px;">Route 2: Table Connection</span></div>
-        <div class="tt-stats">
-          <span class="tt-stat">👁 8.9K views</span>
-          <span class="tt-stat">❤️ 2.0K likes</span>
-          <span class="tt-stat">💬 3 comments</span>
-          <span class="tt-stat">↗️ 48 shares</span>
-        </div>
-        <span class="tt-link">View on TikTok →</span>
-      </div>
-    </a>
-
-  </div>
-
-  <!-- Platform intelligence -->
-  <div class="grid-2" style="margin-top:32px;">
-    <div class="chart-wrap">
-      <div class="chart-title">Creative Route Cultural Relevance by Platform</div>
-      <canvas id="platformRouteChart" height="250" aria-label="Creative route relevance by platform" role="img"></canvas>
-    </div>
-    <div class="chart-wrap">
-      <div class="chart-title">Slow Living Content Engagement — TikTok (views)</div>
-      <canvas id="ttEngagementChart" height="250" aria-label="TikTok slow living content engagement" role="img"></canvas>
-    </div>
-  </div>
-
-  <div class="info-box opportunity" style="margin-top:24px;">
-    <span class="icon">🎬</span>
-    <div><strong>Content Opportunity:</strong> The warm kitchen / cosy table aesthetic is the dominant visual language of slow living content on TikTok — particularly in the UK. Moretti's creative should live in this visual world but bring the specific warmth of the Italian table: the olive oil bottle, the wine glass next to the beer, the extra pasta, the bread being torn rather than sliced. Not "Italian aesthetic" — but <em>Italian table truth</em>.</div>
-  </div>
-</div>
 
 </div><!-- /main -->
 
@@ -1705,50 +1504,6 @@ new Chart(document.getElementById('tensionChart'), {
   }
 });
 
-// ── Chart 6: Platform x Route
-new Chart(document.getElementById('platformRouteChart'), {
-  type: 'bar',
-  data: {
-    labels: ['TikTok', 'Instagram', 'Twitter/X', 'Reddit', 'LinkedIn'],
-    datasets: [
-      { label: 'Route 1 (Slow Life)', data: [9, 8, 5, 7, 4], backgroundColor: 'rgba(45,106,79,0.8)', borderRadius: 4 },
-      { label: 'Route 2 (Conviviality)', data: [7, 8, 6, 8, 5], backgroundColor: 'rgba(139,69,19,0.8)', borderRadius: 4 },
-      { label: 'Route 3 (Authenticity)', data: [8, 6, 9, 7, 3], backgroundColor: 'rgba(74,25,66,0.8)', borderRadius: 4 },
-    ]
-  },
-  options: {
-    plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } },
-    scales: {
-      x: { grid: { display: false } },
-      y: { max: 10, ticks: { callback: v => v + '/10' }, grid: { color: '#F0EDE8' } }
-    }
-  }
-});
-
-// ── Chart 7: TikTok engagement
-new Chart(document.getElementById('ttEngagementChart'), {
-  type: 'bar',
-  data: {
-    labels: ['@eklipsu', '@another_cat_mommy', '@cosyvera (UK)', '@lenas_cozy_cottage', '@ana_explorando', '@alllyheilig'],
-    datasets: [{
-      label: 'Views',
-      data: [1500000, 896200, 175500, 66300, 56100, 8907],
-      backgroundColor: [
-        'rgba(196,30,58,0.85)', 'rgba(196,30,58,0.7)', 'rgba(196,30,58,0.85)',
-        'rgba(196,30,58,0.5)', 'rgba(196,30,58,0.45)', 'rgba(196,30,58,0.35)'
-      ],
-      borderRadius: 4,
-    }]
-  },
-  options: {
-    indexAxis: 'y',
-    plugins: { legend: { display: false } },
-    scales: {
-      x: { ticks: { callback: v => fmt(v) }, grid: { color: '#F0EDE8' } },
-      y: { grid: { display: false }, ticks: { font: { size: 11 } } }
-    }
-  }
-});
 </script>
 </body>
 </html>
