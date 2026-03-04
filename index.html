@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Birra Moretti — Cultural Intelligence Report</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --moretti-red: #C41E3A;
+    --moretti-gold: #D4A843;
+    --moretti-cream: #F5F0E8;
+    --moretti-dark: #1A1A1A;
+    --moretti-mid: #3D2B1F;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Georgia', 'Times New Roman', serif; background: #F8F5F0; color: #1A1A1A; -webkit-font-smoothing: antialiased; }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #1A0A05 0%, #3D1F10 60%, #C41E3A 100%);
+    color: #fff; padding: 40px 0 30px;
+    border-bottom: 4px solid var(--moretti-gold);
+  }
+  .header-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+  .brand-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(212,168,67,0.2); border: 1px solid rgba(212,168,67,0.5);
+    padding: 4px 12px; border-radius: 20px; font-size: 11px;
+    letter-spacing: 2px; text-transform: uppercase; color: var(--moretti-gold);
+    margin-bottom: 16px;
+  }
+  header h1 { font-size: 36px; font-weight: normal; letter-spacing: -0.5px; margin-bottom: 6px; }
+  header h1 span { color: var(--moretti-gold); }
+  header p { color: rgba(255,255,255,0.8); font-size: 14px; font-style: italic; }
+  .header-meta { display: flex; gap: 32px; margin-top: 24px; flex-wrap: wrap; }
+  .meta-item { font-size: 12px; }
+  .meta-item .label { color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; }
+  .meta-item .value { color: #fff; font-weight: bold; font-size: 13px; }
+
+  /* ── STAT CARDS ── */
+  .stat-row {
+    max-width: 1200px; margin: -20px auto 0; padding: 0 32px;
+    display: grid; grid-template-columns: repeat(4,1fr); gap: 16px;
+    position: relative; z-index: 10;
+  }
+  .stat-card {
+    background: #fff; border-radius: 12px; padding: 20px;
+    text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    border-top: 3px solid; cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .stat-card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.14); }
+  .stat-card.red { border-top-color: var(--moretti-red); }
+  .stat-card.gold { border-top-color: var(--moretti-gold); }
+  .stat-card.blue { border-top-color: #2563EB; }
+  .stat-card.green { border-top-color: #16A34A; }
+  .stat-card .num { font-size: 36px; font-weight: bold; line-height: 1; margin-bottom: 4px; }
+  .stat-card.red .num { color: var(--moretti-red); }
+  .stat-card.gold .num { color: #B8860B; }
+  .stat-card.blue .num { color: #2563EB; }
+  .stat-card.green .num { color: #16A34A; }
+  .stat-card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #888; }
+
+  /* ── TABS ── */
+  .tab-nav {
+    background: #fff; border-bottom: 1px solid #E5E0D8;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .tab-nav-inner {
+    max-width: 1200px; margin: 0 auto; padding: 12px 32px;
+    display: flex; gap: 8px; overflow-x: auto;
+    -ms-overflow-style: none; scrollbar-width: none;
+  }
+  .tab-nav-inner::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    padding: 10px 18px; font-size: 13px;
+    border: 1px solid #D5D0C8; border-radius: 8px;
+    background: #F8F5F0; cursor: pointer; color: #666;
+    transition: all 0.2s; white-space: nowrap; font-family: inherit;
+    font-weight: 500;
+  }
+  .tab-btn:hover { background: #EDE8E0; color: #333; border-color: #C0B8AC; }
+  .tab-btn:focus-visible { outline: 2px solid var(--moretti-red); outline-offset: 2px; }
+  .tab-btn.active {
+    background: var(--moretti-dark); color: #fff;
+    border-color: var(--moretti-dark); font-weight: bold;
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
+
+  /* ── SECTION HEADERS ── */
+  .section-label {
+    display: inline-block; background: var(--moretti-red); color: #fff;
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 3px; margin-bottom: 8px;
+  }
+  .section-title { font-size: 28px; font-weight: normal; margin-bottom: 6px; }
+  .section-sub { color: #666; font-size: 14px; font-style: italic; margin-bottom: 32px; }
+
+  /* ── CARDS ── */
+  .card {
+    background: #fff; border-radius: 12px; padding: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 20px;
+  }
+  .card h3 { font-size: 18px; margin-bottom: 12px; }
+  .card p { line-height: 1.7; color: #444; font-size: 14px; }
+
+  /* ── GRID ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+
+  /* ── MARKET CARDS ── */
+  .market-card {
+    background: #fff; border-radius: 12px; padding: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06); border-left: 4px solid;
+  }
+  .market-card.uk { border-left-color: #003087; }
+  .market-card.romania { border-left-color: #002B7F; }
+  .market-card.switzerland { border-left-color: #FF0000; }
+  .market-card.ireland { border-left-color: #169B62; }
+  .market-card.serbia { border-left-color: #C6363C; }
+  .market-card.brazil { border-left-color: #009C3B; }
+  .market-card h4 { font-size: 14px; font-weight: bold; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .market-card p { font-size: 12px; color: #555; line-height: 1.6; }
+  .market-card .flag { font-size: 20px; }
+
+  /* ── TREND PILLS ── */
+  .trend-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .pill {
+    font-size: 11px; padding: 4px 10px; border-radius: 20px;
+    font-weight: bold; letter-spacing: 0.5px;
+  }
+  .pill.up { background: #DCFCE7; color: #16A34A; }
+  .pill.down { background: #FEE2E2; color: #DC2626; }
+  .pill.neutral { background: #F3F4F6; color: #6B7280; }
+
+  /* ── TENSION BATTLEGROUND CARDS ── */
+  .battleground {
+    background: #fff; border-radius: 16px; padding: 28px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 24px;
+    border-left: 5px solid;
+  }
+  .battleground.severity-high { border-left-color: #DC2626; }
+  .battleground.severity-mid { border-left-color: #F59E0B; }
+  .battleground.severity-low { border-left-color: #3B82F6; }
+  .battleground-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+  .battleground-title { font-size: 20px; font-weight: bold; }
+  .battleground-score {
+    text-align: right;
+  }
+  .battleground-score .num { font-size: 42px; font-weight: bold; line-height: 1; }
+  .battleground-score .denom { font-size: 16px; color: #999; }
+  .severity-high .battleground-score .num { color: #DC2626; }
+  .severity-mid .battleground-score .num { color: #D97706; }
+  .severity-low .battleground-score .num { color: #2563EB; }
+  .battleground-desc { color: #555; font-size: 14px; line-height: 1.7; margin-bottom: 16px; }
+  .platform-badges { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .pbadge {
+    font-size: 10px; font-weight: bold; padding: 3px 8px;
+    border-radius: 4px; letter-spacing: 0.5px;
+  }
+  .pbadge.tiktok { background: #000; color: #fff; }
+  .pbadge.reddit { background: #FF4500; color: #fff; }
+  .pbadge.twitter { background: #1DA1F2; color: #fff; }
+  .pbadge.instagram { background: #E1306C; color: #fff; }
+  .versus-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center; margin-bottom: 20px; }
+  .side-a, .side-b {
+    padding: 16px; border-radius: 10px; font-size: 13px; line-height: 1.6;
+  }
+  .side-a { background: #F0F4FF; border: 1px solid #CBD5F5; }
+  .side-b { background: #FFF0F0; border: 1px solid #FFC5C5; }
+  .side-label { font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .side-a .side-label { color: #3B82F6; }
+  .side-b .side-label { color: #DC2626; }
+  .vs-badge {
+    width: 36px; height: 36px; background: #1A1A1A; color: #fff;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: bold;
+  }
+  .do-dont { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .do-panel { background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 10px; padding: 16px; }
+  .dont-panel { background: #FFF5F5; border: 1px solid #FECACA; border-radius: 10px; padding: 16px; }
+  .panel-label { font-size: 11px; font-weight: bold; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; }
+  .do-panel .panel-label { color: #16A34A; }
+  .dont-panel .panel-label { color: #DC2626; }
+  .do-panel li, .dont-panel li { font-size: 12px; line-height: 1.6; color: #374151; margin-left: 14px; margin-bottom: 4px; }
+
+  /* ── CREATIVE ROUTE CARDS ── */
+  .route-card {
+    background: #fff; border-radius: 16px; overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 24px;
+  }
+  .route-header {
+    padding: 24px 28px; color: #fff;
+    display: flex; justify-content: space-between; align-items: flex-start;
+  }
+  .route-header.r1 { background: linear-gradient(135deg, #1a472a, #2d6a4f); }
+  .route-header.r2 { background: linear-gradient(135deg, #3d2b1f, #8b4513); }
+  .route-header.r3 { background: linear-gradient(135deg, #1a1a2e, #4a1942); }
+  .route-number { font-size: 60px; font-weight: bold; opacity: 0.2; line-height: 1; }
+  .route-body { padding: 28px; }
+  .route-title { font-size: 22px; margin-bottom: 4px; }
+  .route-tagline { font-size: 14px; opacity: 0.8; font-style: italic; }
+  .route-score-display { text-align: right; }
+  .route-score-display .big { font-size: 48px; font-weight: bold; line-height: 1; }
+  .route-score-display .small { font-size: 12px; opacity: 0.7; }
+
+  /* ── TIKTOK CONTENT CARDS ── */
+  .tiktok-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+  .tt-card {
+    background: #fff; border-radius: 16px; overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none; color: inherit; display: block;
+  }
+  .tt-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+  .tt-thumb {
+    width: 100%; height: 200px; object-fit: cover; background: #1A1A1A;
+    display: block;
+  }
+  .tt-thumb-placeholder {
+    width: 100%; height: 200px; background: linear-gradient(135deg, #1A1A1A, #333);
+    display: flex; align-items: center; justify-content: center; color: #fff; font-size: 40px;
+  }
+  .tt-body { padding: 16px; }
+  .tt-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .tt-platform { background: #000; color: #fff; font-size: 10px; font-weight: bold; padding: 2px 8px; border-radius: 4px; }
+  .tt-user { font-size: 12px; color: #888; }
+  .tt-text { font-size: 13px; color: #333; margin-bottom: 12px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .tt-stats { display: flex; gap: 12px; font-size: 11px; color: #888; flex-wrap: wrap; }
+  .tt-stat { display: flex; align-items: center; gap: 3px; }
+  .tt-link { font-size: 11px; font-weight: bold; color: var(--moretti-red); margin-top: 10px; display: block; }
+
+  /* ── COMPARISON TABLE ── */
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .comp-table th { background: var(--moretti-dark); color: #fff; padding: 12px 16px; text-align: left; font-size: 12px; letter-spacing: 0.5px; }
+  .comp-table td { padding: 12px 16px; border-bottom: 1px solid #F0EDE8; vertical-align: top; }
+  .comp-table tr:hover td { background: var(--moretti-cream); }
+  .comp-table .brand-name { font-weight: bold; }
+  .win { color: #16A34A; font-weight: bold; }
+  .lose { color: #DC2626; }
+  .neutral-cell { color: #888; }
+
+  /* ── HEATMAP ── */
+  .heatmap-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .heatmap-label { width: 200px; font-size: 12px; color: #555; flex-shrink: 0; }
+  .heatmap-track { flex: 1; height: 24px; background: #F0EDE8; border-radius: 4px; overflow: hidden; }
+  .heatmap-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; color: #fff; font-weight: bold; transition: width 1s ease; }
+  .heatmap-score { width: 32px; font-size: 13px; font-weight: bold; text-align: right; flex-shrink: 0; }
+
+  /* ── INFO BOX ── */
+  .info-box {
+    border-radius: 10px; padding: 16px 20px; margin-bottom: 20px;
+    font-size: 13px; line-height: 1.7;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .info-box.alert { background: #FFF9E6; border: 1px solid #FDE68A; }
+  .info-box.insight { background: #EFF6FF; border: 1px solid #BFDBFE; }
+  .info-box.opportunity { background: #F0FDF4; border: 1px solid #BBF7D0; }
+  .info-box .icon { font-size: 20px; flex-shrink: 0; }
+  .info-box strong { color: #1A1A1A; }
+
+  /* ── QUOTE BLOCK ── */
+  .quote-block {
+    background: var(--moretti-cream); border-left: 4px solid var(--moretti-gold);
+    padding: 16px 20px; margin: 16px 0; font-style: italic; font-size: 14px; line-height: 1.7; color: #555;
+    border-radius: 0 8px 8px 0;
+  }
+
+  /* ── BIG INSIGHT ── */
+  .big-insight {
+    background: linear-gradient(135deg, #1A0A05, #3D1F10);
+    color: #fff; border-radius: 16px; padding: 32px; margin-bottom: 24px;
+    border: 1px solid rgba(212,168,67,0.3);
+  }
+  .big-insight .pre { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--moretti-gold); margin-bottom: 10px; }
+  .big-insight h3 { font-size: 24px; margin-bottom: 12px; font-weight: normal; }
+  .big-insight p { color: rgba(255,255,255,0.75); font-size: 14px; line-height: 1.8; }
+
+  /* ── CHART CONTAINERS ── */
+  .chart-wrap { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .chart-title { font-size: 14px; font-weight: bold; margin-bottom: 16px; color: #333; }
+
+  /* ── DATA TABLE ── */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .data-table th { background: #F5F0E8; padding: 10px 14px; text-align: left; font-size: 11px; letter-spacing: 0.5px; color: #555; }
+  .data-table td { padding: 10px 14px; border-bottom: 1px solid #F0EDE8; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--moretti-dark); color: rgba(255,255,255,0.65);
+    text-align: center; padding: 32px 24px; font-size: 12px; margin-top: 40px;
+    letter-spacing: 0.3px; line-height: 1.8;
+  }
+  footer strong { color: rgba(255,255,255,0.9); }
+
+  /* scroll offset for hash links under sticky nav */
+  [id^="panel-"] { scroll-margin-top: 60px; }
+  .section-anchor { scroll-margin-top: 80px; }
+
+  /* smooth panel transitions */
+  .panel { display: none; animation: fadeIn 0.25s ease; }
+  .panel.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 768px) {
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .versus-row { grid-template-columns: 1fr; }
+    .do-dont { grid-template-columns: 1fr; }
+    .tiktok-grid { grid-template-columns: 1fr; }
+    header h1 { font-size: 26px; }
+    .section-title { font-size: 22px; }
+    .tab-nav-inner { padding: 0 16px; }
+    .main { padding: 24px 16px; }
+    .header-inner { padding: 0 16px; }
+    .stat-row { padding: 0 16px; }
+  }
+
+  @media print {
+    .tab-nav { display: none; }
+    .panel { display: block !important; page-break-inside: avoid; }
+    .stat-card { box-shadow: none; border: 1px solid #ddd; }
+    .card, .chart-wrap, .battleground, .route-card { box-shadow: none; border: 1px solid #ddd; }
+    .big-insight { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .tt-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="brand-badge">🍺 Uncommon × Cultural Intelligence</div>
+    <h1>Birra Moretti — <span>Strategic Cultural Report</span></h1>
+    <p>Category Trends · Italian Beer Perceptions · Cultural Tensions · Creative Route Assessment</p>
+    <div class="header-meta">
+      <div class="meta-item"><div class="label">Brand</div><div class="value">Birra Moretti (Heineken)</div></div>
+      <div class="meta-item"><div class="label">Key Market</div><div class="value">UK + 8 Markets</div></div>
+      <div class="meta-item"><div class="label">Date</div><div class="value">March 2026</div></div>
+      <div class="meta-item"><div class="label">Content Analysed</div><div class="value">1,100+ Items</div></div>
+      <div class="meta-item"><div class="label">Platforms</div><div class="value">TikTok · Reddit · Twitter/X · Trade Press</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- STAT CARDS -->
+<div class="stat-row">
+  <div class="stat-card red" onclick="showTab('tensions',this)" role="link" tabindex="0" aria-label="View Cultural Battlegrounds">
+    <div class="num">3</div>
+    <div class="label">Cultural Battlegrounds</div>
+  </div>
+  <div class="stat-card gold" onclick="showTab('tensions',this)" role="link" tabindex="0" aria-label="View Highest Tension Score">
+    <div class="num">8/10</div>
+    <div class="label">Highest Tension Score</div>
+  </div>
+  <div class="stat-card blue" onclick="showTab('q1',this)" role="link" tabindex="0" aria-label="View Markets Covered">
+    <div class="num">9</div>
+    <div class="label">Markets Covered</div>
+  </div>
+  <div class="stat-card green" onclick="showTab('routes',this)" role="link" tabindex="0" aria-label="View Creative Routes">
+    <div class="num">Route 2</div>
+    <div class="label">Highest Brand Opportunity</div>
+  </div>
+</div>
+
+<!-- TAB NAV -->
+<div class="tab-nav">
+  <div class="tab-nav-inner" role="tablist" aria-label="Report sections">
+    <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-q1" onclick="showTab('q1',this)">Q1: Beer Category Trends</button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-q2" onclick="showTab('q2',this)">Q2: Italian Beer Perceptions</button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-q3" onclick="showTab('q3',this)">Q3: Moretti vs Competitors</button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-tensions" onclick="showTab('tensions',this)">Cultural Tensions</button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-routes" onclick="showTab('routes',this)">Creative Routes</button>
+    <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-social" onclick="showTab('social',this)">Social Signals</button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══════════════════════════════════════════════════
+     Q1: BEER CATEGORY TRENDS
+════════════════════════════════════════════════════ -->
+<div id="panel-q1" class="panel active" role="tabpanel">
+  <div class="section-label">QUESTION 1</div>
+  <h2 class="section-title">Beer Category Trends by Market</h2>
+  <p class="section-sub">UK deep dive + key summaries for momentum and future bet markets</p>
+
+  <!-- UK DEEP DIVE -->
+  <div class="big-insight">
+    <div class="pre">UK STRATEGIC MARKET — 55% of global Moretti volumes</div>
+    <h3>World lager is still winning — but the category is getting crowded</h3>
+    <p>World/Mediterranean lagers now represent 27% of UK beer volume and 32.3% of value — up 65% and 78% vs pre-pandemic. The premiumisation wave that lifted Moretti is real and ongoing. But the category's success has attracted copycats, and the premium lager segment as a whole saw volume decline of 10.4% in 2024. The winners are now those who differentiate on meaning, not just Mediterranean imagery.</p>
+  </div>
+
+  <div class="grid-2">
+    <!-- Growing -->
+    <div class="card">
+      <h3>🟢 Growing UK Segments</h3>
+      <table class="data-table">
+        <thead><tr><th>Segment</th><th>Growth</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><strong>World Lager</strong></td><td class="win">+11% vol / +15% val</td><td>Mediterranean premium positioning leads</td></tr>
+          <tr><td><strong>Stout</strong></td><td class="win">+15% vol / +23.9% val</td><td>Craft stout +121.7% — Guinness dominant</td></tr>
+          <tr><td><strong>No/Low Alcohol</strong></td><td class="win">+20% (fastest growing)</td><td>200M pints projected by 2025</td></tr>
+          <tr><td><strong>Premium Draught</strong></td><td class="win">+10% vol</td><td>Moretti leads 2025 draught market</td></tr>
+          <tr><td><strong>No/Low Draught</strong></td><td class="win">+32% vol</td><td>Now in 25% of managed pubs</td></tr>
+        </tbody>
+      </table>
+      <div class="trend-row">
+        <span class="pill up">↑ World Lager</span>
+        <span class="pill up">↑ Stout</span>
+        <span class="pill up">↑ No/Low</span>
+        <span class="pill up">↑ Premium Draught</span>
+      </div>
+    </div>
+
+    <!-- Declining -->
+    <div class="card">
+      <h3>🔴 Declining UK Segments</h3>
+      <table class="data-table">
+        <thead><tr><th>Segment</th><th>Decline</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Carling</strong></td><td class="lose">-£43.3M value</td><td>2nd biggest absolute loss in top 100 Grocer rankings</td></tr>
+          <tr><td><strong>Foster's</strong></td><td class="lose">Double-digit vol &amp; val, -£34.1M</td><td>Accelerating mainstream lager collapse</td></tr>
+          <tr><td><strong>Stella + Bud + Carling</strong></td><td class="lose">-46M litres combined</td><td>Top 3 UK lagers shed 46M litres in 2023 alone</td></tr>
+          <tr><td><strong>Craft Lager</strong></td><td class="lose">-6.5% vol on-trade</td><td>~100 craft breweries stopped trading in past year</td></tr>
+          <tr><td><strong>Craft Ale</strong></td><td class="lose">-6.2% vol</td><td>BrewDog lost distribution in 1/3 of pubs, up for sale</td></tr>
+          <tr><td><strong>Pub visits</strong></td><td class="lose">-6% in 2024 vs 2023</td><td>But spend-per-visit rising — "quality over quantity"</td></tr>
+        </tbody>
+      </table>
+      <div class="trend-row">
+        <span class="pill down">↓ Mainstream Lager</span>
+        <span class="pill down">↓ Craft</span>
+        <span class="pill down">↓ Pub Visits</span>
+        <span class="pill up">↑ Spend per Visit</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Consumer Shifts -->
+  <div class="card">
+    <h3>🧠 Key UK Consumer Behaviour Shifts</h3>
+    <div class="grid-3" style="margin-top:16px; margin-bottom:0;">
+      <div>
+        <div class="section-label" style="margin-bottom:8px;">DRINKING LESS, BETTER</div>
+        <p>70% of beer consumption shifting to premium/super-premium. Over one-third of consumers report drinking less year-on-year — of those cutting back: <strong>40% cite health, 25% saving money, 24% going out less.</strong> 19% of UK adults are now completely alcohol-free (up from 16% in 2011). "Drinking less but better" squarely benefits Moretti's premium position.</p>
+      </div>
+      <div>
+        <div class="section-label" style="margin-bottom:8px;">THE GUINNESS RENAISSANCE</div>
+        <p>Stout now holds <strong>11.8% of on-trade market share</strong> (up from 8.2% two years prior). One in nine pints poured in the UK is a Guinness. 82% of 18–24-year-old stout drinkers are <em>new to the category</em> — driven substantially by TikTok virality and the <strong>#SplitTheG trend</strong>. A £48.4M off-trade brand driven by social culture, not just taste.</p>
+      </div>
+      <div>
+        <div class="section-label" style="margin-bottom:8px;">MODERATION WAVE</div>
+        <p>200 million pints of no/low beer consumed in 2025 — 2.7% of the total market. Almost <strong>one in two UK drinkers</strong> has consumed no/low in the past year (up from 22% in 2021). Guinness 0.0 leads off-trade at £48.4M; Heineken 0.0 leads on-trade. <strong>Madri 0.0% launched 2025</strong> and is already award-winning. The table occasion naturally includes non-drinkers — a Moretti opportunity.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="grid-2">
+    <div class="chart-wrap">
+      <div class="chart-title">UK Beer Segment Growth/Decline (2024-2025, % volume)</div>
+      <canvas id="ukTrendsChart" height="250" aria-label="UK Beer Segment Growth and Decline chart" role="img"></canvas>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Consumer Behaviour Drivers (% of UK adults citing)</div>
+      <canvas id="ukConsumerChart" height="250" aria-label="Consumer Behaviour Drivers chart" role="img"></canvas>
+    </div>
+  </div>
+
+  <div class="info-box alert">
+    <span class="icon">⚠️</span>
+    <div><strong>The Moretti Problem in UK:</strong> The brand is simultaneously winning (leads 2025 draught market) AND declining in share. Why? Competitors have cloned the Mediterranean-lifestyle playbook. Peroni, San Miguel, Estrella, and a dozen craft imports all now claim "sun-soaked moments." Moretti needs a layer of meaning that goes beyond imagery — one that sits in the emotional territory of what happens <em>at the table</em>, not just the lifestyle around it.</div>
+  </div>
+
+  <!-- International Markets -->
+  <h3 style="margin-bottom:20px; font-size:20px;">Momentum & Future Bet Markets</h3>
+  <div class="grid-3">
+    <div class="market-card romania">
+      <h4><span class="flag">🇷🇴</span> Romania <span style="font-size:11px; font-weight:normal; color:#888;">(Momentum)</span></h4>
+      <p>Slight volume growth in 2024 after 3 years of decline. High inflation and rising costs constrain market — consumers shifting to retail/home consumption. Growing craft preference and interest in low/no-alcohol. <strong>Opportunity:</strong> Moretti as aspirational European brand with genuine food-table positioning.</p>
+      <div class="trend-row">
+        <span class="pill up">↑ Craft</span>
+        <span class="pill up">↑ No/Low</span>
+        <span class="pill down">↓ On-trade</span>
+      </div>
+    </div>
+    <div class="market-card switzerland">
+      <h4><span class="flag">🇨🇭</span> Switzerland <span style="font-size:11px; font-weight:normal; color:#888;">(Momentum)</span></h4>
+      <p>Stable premium market with high disposable income. Strong craft dominance and sustainability focus. Swiss consumers highly receptive to authentic Italian positioning — the "Made in Italy" premium resonates strongly here. Low/no-alcohol growing in line with health trends.</p>
+      <div class="trend-row">
+        <span class="pill up">↑ Premium</span>
+        <span class="pill up">↑ Craft</span>
+        <span class="pill neutral">→ Stable</span>
+      </div>
+    </div>
+    <div class="market-card ireland">
+      <h4><span class="flag">🇮🇪</span> Ireland <span style="font-size:11px; font-weight:normal; color:#888;">(Momentum)</span></h4>
+      <p>Beer consumption down 1.6% (2nd consecutive year). Guinness stout dominates at 43.3% share. Non-alcoholic beer star performer: +25% in 2024. Lager (57.2% of market) declining. Moretti must compete hard — the table/meal occasion is less culturally embedded here vs. UK.</p>
+      <div class="trend-row">
+        <span class="pill down">↓ Lager</span>
+        <span class="pill up">↑ Stout</span>
+        <span class="pill up">↑ No/Low +25%</span>
+      </div>
+    </div>
+    <div class="market-card serbia">
+      <h4><span class="flag">🇷🇸</span> Serbia <span style="font-size:11px; font-weight:normal; color:#888;">(Momentum)</span></h4>
+      <p>Beer remains largest alcohol category. Domestic brands (Apatin) lead on price/availability. Inflation driving shift to home consumption. Moretti has room to grow as aspirational brand — but must navigate price sensitivity. On-trade boosted by tourism growth.</p>
+      <div class="trend-row">
+        <span class="pill neutral">→ Beer stable</span>
+        <span class="pill down">↓ On-trade (locals)</span>
+        <span class="pill up">↑ Tourism on-trade</span>
+      </div>
+    </div>
+    <div class="market-card brazil">
+      <h4><span class="flag">🇧🇷</span> Brazil <span style="font-size:11px; font-weight:normal; color:#888;">(2026 Launch)</span></h4>
+      <p>Massive market with extreme inequality. Churrascaria/gathering culture is a natural fit for Moretti's table positioning. But "slow life" as privilege is especially fraught here — 100M people earn as much as the 6 richest men. Premium Italian must feel aspirational without being exclusionary.</p>
+      <div class="trend-row">
+        <span class="pill up">↑ Conviviality culture</span>
+        <span class="pill neutral">→ Price sensitivity</span>
+      </div>
+    </div>
+    <div class="market-card" style="border-left-color:#002395;">
+      <h4><span class="flag">🇫🇷</span> France + 🇵🇱 Poland + 🇩🇪 Germany <span style="font-size:11px; font-weight:normal; color:#888;">(2026)</span></h4>
+      <p><strong>France:</strong> Wine culture dominates; beer is secondary occasion. Moretti must fight for the aperitif/table moment.<br/><strong>Poland:</strong> Strong craft beer market growing fast; domestic lagers dominate volume.<br/><strong>Germany:</strong> Conservative beer culture (nearly half drink only local brands). Italian positioning has genuine appeal as "something different."</p>
+      <div class="trend-row">
+        <span class="pill up">↑ Italian provenance appeal</span>
+        <span class="pill down">↓ Wine/local dominance</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     Q2: ITALIAN BEER PERCEPTIONS
+════════════════════════════════════════════════════ -->
+<div id="panel-q2" class="panel" role="tabpanel">
+  <div class="section-label">QUESTION 2</div>
+  <h2 class="section-title">Perceptions of Italian Beer</h2>
+  <p class="section-sub">Why Italian? What do consumers expect? What makes it authentic?</p>
+
+  <div class="big-insight">
+    <div class="pre">THE CORE INSIGHT</div>
+    <h3>Italian beer is "the beer that understands food"</h3>
+    <p>Unlike German beers (tradition-bound, conservative), Belgian beers (complex, occasion-specific), or American craft (extreme, experimental), Italian beer occupies a uniquely social and food-centric position. The primary driver of Italian beer choice is the conviction that these beers are <em>made to be drunk with something</em> — and the experience at the table is everything.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Why Consumers Choose Italian Beer</h3>
+      <div style="margin-top:12px;">
+        <div class="heatmap-bar"><div class="heatmap-label">Food pairing philosophy</div><div class="heatmap-track"><div class="heatmap-fill" style="width:90%; background:#C41E3A;">90%</div></div><div class="heatmap-score" style="color:#C41E3A;">9.0</div></div>
+        <div class="heatmap-bar"><div class="heatmap-label">Refreshment / drinkability</div><div class="heatmap-track"><div class="heatmap-fill" style="width:85%; background:#D4A843;">85%</div></div><div class="heatmap-score" style="color:#D4A843;">8.5</div></div>
+        <div class="heatmap-bar"><div class="heatmap-label">Heritage / authenticity</div><div class="heatmap-track"><div class="heatmap-fill" style="width:78%; background:#C41E3A;">78%</div></div><div class="heatmap-score" style="color:#C41E3A;">7.8</div></div>
+        <div class="heatmap-bar"><div class="heatmap-label">Mediterranean lifestyle aspiration</div><div class="heatmap-track"><div class="heatmap-fill" style="width:72%; background:#D4A843;">72%</div></div><div class="heatmap-score" style="color:#D4A843;">7.2</div></div>
+        <div class="heatmap-bar"><div class="heatmap-label">Premium positioning / status</div><div class="heatmap-track"><div class="heatmap-fill" style="width:65%; background:#888;">65%</div></div><div class="heatmap-score" style="color:#888;">6.5</div></div>
+        <div class="heatmap-bar"><div class="heatmap-label">Different from German / Belgian</div><div class="heatmap-track"><div class="heatmap-fill" style="width:58%; background:#888;">58%</div></div><div class="heatmap-score" style="color:#888;">5.8</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>What Consumers Expect from Italian Beer</h3>
+      <div style="margin-top: 12px;">
+        <div style="margin-bottom:14px; padding:12px; background:#F5F0E8; border-radius:8px;">
+          <div style="font-size:11px; font-weight:bold; letter-spacing:1px; color:#888; margin-bottom:6px;">LIQUID EXPECTATIONS</div>
+          <ul style="list-style:none; font-size:13px; line-height:1.8; color:#444;">
+            <li>🍺 <strong>ABV:</strong> 4.5–5.5% sweet spot (93% preference range)</li>
+            <li>👅 <strong>Taste:</strong> Fuller body and slightly sweeter than international lagers</li>
+            <li>🌿 <strong>Bitterness:</strong> Moderate — never aggressive</li>
+            <li>🍋 <strong>Finish:</strong> Crisp, citrus-inflected, clean</li>
+            <li>🫧 <strong>Carbonation:</strong> Fine, delicate bubbles — for freshness not fizz</li>
+          </ul>
+        </div>
+        <div style="padding:12px; background:#F5F0E8; border-radius:8px;">
+          <div style="font-size:11px; font-weight:bold; letter-spacing:1px; color:#888; margin-bottom:6px;">BRANDING EXPECTATIONS</div>
+          <ul style="list-style:none; font-size:13px; line-height:1.8; color:#444;">
+            <li>🏛️ Heritage story and family ownership narrative</li>
+            <li>📍 Regional Italian identity (not generic "Italy")</li>
+            <li>🌾 Local/indigenous ingredient sourcing</li>
+            <li>📜 Consistent recipe — not "improved" or reinvented</li>
+            <li>🎨 Distinctly Italian visual codes (human figures, regional motifs)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Authenticity -->
+  <h3 style="font-size:20px; margin-bottom:20px;">What Makes Italian Beer Feel <em>Authentic</em>?</h3>
+  <div class="grid-3">
+    <div class="card" style="border-top: 3px solid var(--moretti-gold);">
+      <h3>📜 Historical Consistency</h3>
+      <p>Birra Moretti literally prints "l'autentica" on its label — and the recipe has remained almost unchanged since 1859. Consumers trust brands that don't "improve" themselves for modern tastes. The label featuring the famous mustachioed man with a glass of beer is one of Italy's most recognised brand icons.</p>
+      <div class="quote-block">"If it's been the same since 1859, they must be doing something right."</div>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--moretti-gold);">
+      <h3>📍 Regional Specificity</h3>
+      <p>Authentic Italian beers tell stories rooted in <em>place</em> — not generic Italy, but specific regions: Lombardy's Alpine water, Sicily's coastal salt air, Piedmont's grain traditions. The more specific the story, the more authentic it feels. Vague "Italian sunshine" imagery now reads as generic.</p>
+      <div class="quote-block">"I want to know where it's from, who made it, what water they used."</div>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--moretti-gold);">
+      <h3>🍽️ Food-First Philosophy</h3>
+      <p>The most authentic marker of Italian beer identity is its inseparability from food. Italian lager's carbonation cuts through fatty foods — mozzarella, pizza, salumi. This isn't accidental: <strong>Peter Boizot specifically imported Peroni to serve at Pizza Express restaurants in 1973</strong>, establishing the pizza-and-Italian-beer pairing at the very inception of the category in Britain. Nearly half of all Birra Moretti occasions are consumed with food — a claim no competitor can match.</p>
+      <div class="quote-block">"Italian beer isn't for getting drunk. It's for eating better."</div>
+    </div>
+  </div>
+
+  <div class="info-box insight" style="margin-bottom:20px;">
+    <span class="icon">💬</span>
+    <div><strong>Veronica Sica, Heineken Beer Brands Director:</strong> Mediterranean lagers are <em>"synonymous with zest for life for many consumers because they are associated with holidays, sun, beach, and sea."</em> Post-pandemic, when flights to Italy were restricted, consumers <em>"closed their eyes"</em> over a Mediterranean lager and transported themselves. The challenge now: that escapism has been commoditised — every competitor claims the same sunshine.</div>
+  </div>
+
+  <div class="info-box insight">
+    <span class="icon">💡</span>
+    <div><strong>Strategic Implication:</strong> "Mediterranean lifestyle" as a category cue has been commoditised. The next level of Italian beer authenticity lives in the specificity of the <em>table moment</em> — the meal, the gathering, the ritual of eating together. Brands that can own this territory will escape the generic sunshine-and-aperitif trap. Italian families spend <strong>114 minutes per day</strong> eating and drinking (third highest in the OECD) — this is a universally understood and beloved cultural code in the UK that no Spanish competitor can replicate.</div>
+  </div>
+
+  <!-- SOCIAL VOID RESEARCH FINDING -->
+  <div class="big-insight" style="margin-top:8px;">
+    <div class="pre">RESEARCH AGENT SIGNAL — 1,000+ TIKTOK ITEMS + 100 REDDIT POSTS ANALYSED</div>
+    <h3>The Social Void: Italian food is everywhere. Italian beer is nowhere.</h3>
+    <p style="margin-bottom:20px;">Across every item in our primary research dataset — 1,000+ TikTok posts, 100 Reddit threads, 76 Trustpilot reviews — <strong style="color:var(--moretti-gold);">zero mentions of Birra Moretti were found</strong>. The brand that leads UK draught by value is completely invisible on the platforms where taste, culture, and identity are formed.</p>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px;">
+      <div style="background:rgba(255,255,255,0.08); border-radius:12px; padding:20px;">
+        <div style="font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--moretti-gold); margin-bottom:10px;">WHAT IS APPEARING</div>
+        <div style="font-size:40px; font-weight:bold; line-height:1; margin-bottom:6px;">10.2K</div>
+        <div style="font-size:13px; color:rgba(255,255,255,0.75); line-height:1.6;">TikTok plays for Italian restaurant communal dining content · avg. 106 likes · entirely organic, no beer brand involvement</div>
+      </div>
+      <div style="background:rgba(196,30,58,0.2); border:1px solid rgba(196,30,58,0.4); border-radius:12px; padding:20px;">
+        <div style="font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--moretti-gold); margin-bottom:10px;">WHAT IS NOT APPEARING</div>
+        <div style="font-size:40px; font-weight:bold; line-height:1; margin-bottom:6px; color:#ff8888;">0</div>
+        <div style="font-size:13px; color:rgba(255,255,255,0.75); line-height:1.6;">Italian beer mentions across 1,000+ TikTok items · 0 Moretti mentions in 100 Reddit posts · the brand does not exist in organic social conversation</div>
+      </div>
+    </div>
+    <p style="color:rgba(255,255,255,0.75); font-size:14px; line-height:1.8;">The people who love Italian food culture are creating content, gathering around it, and building identity around it — and no beer brand is part of that conversation. This isn't a sentiment problem or a perception gap. It's a complete absence. <strong style="color:var(--moretti-gold);">The territory is entirely uncontested.</strong></p>
+  </div>
+
+  <!-- Italian Beer vs Wine -->
+  <div class="card">
+    <h3>🍷 Italian Beer in the Context of Wine Culture</h3>
+    <div class="grid-2" style="margin-top:16px; margin-bottom:0;">
+      <div>
+        <p style="margin-bottom:12px;">While 55% of Italians prefer wine, 45% lean towards beer — and beer is growing, especially among younger demographics. The relationship isn't competitive: <strong>wine owns formal occasions and celebration; beer owns casual gathering, aperitivo, and food-paired daily meals.</strong></p>
+        <p>Italian beer has successfully positioned itself as the "democratic alternative" — equally authentic, more accessible, better suited to the increasing casualisation of the Italian table. The Slow Food movement's emphasis on gathering and food quality creates a halo that benefits premium Italian beer brands.</p>
+      </div>
+      <div>
+        <div style="background:#F5F0E8; border-radius:10px; padding:20px;">
+          <div style="font-size:12px; font-weight:bold; margin-bottom:12px; color:#555;">OCCASION MAPPING: BEER VS WINE IN ITALY</div>
+          <div style="font-size:13px; line-height:2;">
+            🍷 <strong>Wine:</strong> Formal dinners · Sunday family lunch · Weddings · Celebrations<br/>
+            🍺 <strong>Beer:</strong> Aperitivo · Pizza · Casual friends · Outdoor BBQ · Daily lunch<br/>
+            🍺🍷 <strong>Both:</strong> Long meals with multiple courses · Celebrations with younger guests
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     Q3: MORETTI vs COMPETITORS
+════════════════════════════════════════════════════ -->
+<div id="panel-q3" class="panel" role="tabpanel">
+  <div class="section-label">QUESTION 3</div>
+  <h2 class="section-title">Birra Moretti vs. The Competition</h2>
+  <p class="section-sub">How consumers perceive Moretti relative to Peroni and the broader competitive set</p>
+
+  <div class="big-insight">
+    <div class="pre">THE COMPETITIVE PARADOX</div>
+    <h3>Moretti is #1 on-trade — but Madri just hit £1B in five years using Moretti's own playbook</h3>
+    <p>Birra Moretti overtook Carling as the UK's #1 draught lager by value in August 2024 — £246.7M quarterly draught sales, growing 9.6% YoY. On-trade annual sales exceed £1 billion. But off-trade volumes are declining, and Madri Excepcional — launched October 2020, brewed in Yorkshire — reached £1B in December 2025 by cloning Moretti's Mediterranean lifestyle strategy almost verbatim. Among UK consumers who know Birra Moretti (76% awareness), 77% show loyalty. The Grocer's verdict: <em>"Birra Moretti certainly looks like a brand in need of a reboot."</em></p>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:24px;">
+    <div class="chart-wrap">
+      <div class="chart-title">Moretti vs. Peroni: Brand Attribute Comparison (Consumer Perception)</div>
+      <canvas id="brandRadarChart" height="300" aria-label="Moretti vs Peroni brand attribute comparison" role="img"></canvas>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Competitive Landscape — UK Premium Beer Positioning</div>
+      <canvas id="competitiveChart" height="300" aria-label="Competitive landscape positioning chart" role="img"></canvas>
+    </div>
+  </div>
+
+  <!-- MORETTI BRAND SNAPSHOT -->
+  <div class="card" style="border-left:5px solid var(--moretti-red); margin-bottom:20px;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
+      <div>
+        <div class="section-label">BIRRA MORETTI — BRAND SNAPSHOT</div>
+        <h3 style="margin-top:6px;">🇮🇹 Strengths, Vulnerabilities & Current Campaign</h3>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-bottom:14px;">
+      <div>
+        <div style="font-size:11px; font-weight:bold; letter-spacing:1px; color:#16A34A; margin-bottom:8px;">✅ STRENGTHS</div>
+        <ul style="list-style:none; font-size:13px; line-height:1.8; color:#444;">
+          <li>🏆 <strong>DAL 1859</strong> — genuine heritage; unchanged recipe</li>
+          <li>👨 <strong>The Baffo</strong> — real person, Udine trattoria 1942; warm, distinctive, inimitable</li>
+          <li>🍽️ <strong>Food-pairing moat:</strong> ~50% of occasions consumed with food — unmatched in category</li>
+          <li>💚 <strong>77% loyalty</strong> among drinkers; 89.2% positive sentiment in AI campaign</li>
+          <li>📊 One in five pints in Star Pubs is a Moretti; Heineken's £3B marketing machine behind it</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:11px; font-weight:bold; letter-spacing:1px; color:#DC2626; margin-bottom:8px;">⚠️ VULNERABILITIES</div>
+        <ul style="list-style:none; font-size:13px; line-height:1.8; color:#444;">
+          <li>🏭 <strong>"Brewed in Manchester"</strong> — authenticity exposure as media scrutiny intensifies</li>
+          <li>📉 Off-trade declining: lost nearly 4M litres in retail (2023); only 1.9% value growth via price</li>
+          <li>😴 Brand fatigue: 5+ years of ubiquity; perceived as "yesterday's premium" vs Madri's freshness</li>
+          <li>💬 Forum perception: "Heineken in Italian clothing"</li>
+        </ul>
+      </div>
+    </div>
+    <div style="background:#F5F0E8; border-radius:10px; padding:16px;">
+      <div style="font-size:11px; font-weight:bold; letter-spacing:1px; color:#888; margin-bottom:10px;">2025 GLOBAL RELAUNCH — LUCKY GENERALS</div>
+      <div class="grid-2" style="margin-bottom:0;">
+        <div style="font-size:13px; line-height:1.7; color:#444;">
+          <strong>"Chairs"</strong> — villagers carry chairs up a Tuscan hill to catch the sunset together. Shot on <strong>film in 4:3 ratio</strong> for a deliberately nostalgic, analogue aesthetic — the visual opposite of algorithmically perfect content.<br/><br/>
+          <strong>"Pull Up A Chair"</strong> — companion film reinforcing the theme of shared moments around a table.
+        </div>
+        <div style="font-size:13px; line-height:1.7; color:#444;">
+          Previous campaign: <strong>"Il Grande Invito"</strong> (2022–23, multi-million £ TV + experiential) with Jack Whitehall and Maya Jama.<br/><br/>
+          <strong>Sale di Mare</strong> sub-brand launch (2024) with Anglo-Italian singer <strong>Jack Savoretti</strong> — targeting 25–35-year-olds through a lighter, coastal Italian lens.<br/><br/>
+          AI influencer campaign (2024): reached <strong>1.8M millennials</strong>, 89.2% positive sentiment.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Moretti vs. Peroni: Head to Head</h3>
+    <table class="comp-table" style="margin-top:16px;">
+      <thead>
+        <tr><th>Attribute</th><th>Birra Moretti</th><th>Peroni Nastro Azzurro</th><th>Advantage</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Taste Profile</strong></td>
+          <td>Fuller body, sweeter, "less in your face" — designed for food</td>
+          <td>Light, crisp, sharper — refreshment-led</td>
+          <td class="win">Moretti ✓ (food occasions)</td>
+        </tr>
+        <tr>
+          <td><strong>Heritage Authenticity</strong></td>
+          <td>1859 recipe, mustachioed man icon, "l'autentica" positioning</td>
+          <td>Often perceived as "fast fashion rather than alta moda" by Italians</td>
+          <td class="win">Moretti ✓</td>
+        </tr>
+        <tr>
+          <td><strong>Global Awareness</strong></td>
+          <td>76% UK awareness</td>
+          <td>Higher global name recognition — marketed as super-premium internationally</td>
+          <td class="lose">Peroni ✓</td>
+        </tr>
+        <tr>
+          <td><strong>UK Market Performance</strong></td>
+          <td>Leads 2025 UK draught market; 37% sales growth</td>
+          <td>Strong but facing Moretti pressure; strong in packaged/retail</td>
+          <td class="win">Moretti ✓ (draught)</td>
+        </tr>
+        <tr>
+          <td><strong>Perceived as "Italian at Heart"</strong></td>
+          <td>Seen as a genuine Italian favourite in Europe</td>
+          <td>Perceived as "export beer" — designed for foreign tastes</td>
+          <td class="win">Moretti ✓</td>
+        </tr>
+        <tr>
+          <td><strong>Food Pairing Credibility</strong></td>
+          <td>Explicitly food-designed; pairs widely with Mediterranean cuisine</td>
+          <td>Pizza-and-beer association strong, but less versatile</td>
+          <td class="win">Moretti ✓</td>
+        </tr>
+        <tr>
+          <td><strong>Low/No Alcohol</strong></td>
+          <td>Growing range but less developed than competitor</td>
+          <td>Peroni 0.0 well-established and strong performing</td>
+          <td class="lose">Peroni ✓</td>
+        </tr>
+        <tr>
+          <td><strong>Instagram-friendliness</strong></td>
+          <td>Strong visual identity but legacy feel</td>
+          <td>More contemporary visual design appeal</td>
+          <td class="neutral-cell">Peroni slight ✓</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="font-size:20px; margin-bottom:20px;">Full Competitive Breakdown</h3>
+
+  <!-- MADRI — THE PRIMARY THREAT -->
+  <div class="card" style="border-left:6px solid #D4161C; margin-bottom:20px;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;">
+      <div>
+        <div class="section-label" style="background:#D4161C;">PRIMARY THREAT</div>
+        <h3 style="margin-top:6px;">🇪🇸 Madri Excepcional — The Manufactured Blockbuster</h3>
+        <div style="font-size:13px; color:#888; font-style:italic;">"El Alma de Madrid" (The Soul of Madrid) · Brewed: Tadcaster, Yorkshire · Owner: Molson Coors</div>
+      </div>
+      <div style="text-align:right; background:#FFF0F0; padding:12px 16px; border-radius:8px;">
+        <div style="font-size:28px; font-weight:bold; color:#D4161C;">£1B</div>
+        <div style="font-size:11px; color:#888;">in 5 years (Dec 2025)</div>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-bottom:14px;">
+      <div>
+        <div style="font-size:11px; font-weight:bold; letter-spacing:1px; color:#888; margin-bottom:8px;">GROWTH STORY</div>
+        <ul style="list-style:none; font-size:13px; line-height:1.8; color:#444;">
+          <li>📅 Launched Oct 2020 exclusively on draught</li>
+          <li>💰 <strong>£109.3M first-year sales</strong> — highest-value debut ever recorded by CGA</li>
+          <li>🍺 Now UK's 2nd-largest world lager, 3rd best-selling on-trade lager</li>
+          <li>📦 Off-trade: ~£140M, +12% YoY growth</li>
+          <li>🏪 Available in 9,500+ outlets</li>
+          <li>⚖️ <strong>ABV 4.6%, ~£2.88/litre</strong> — identical to Moretti</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:11px; font-weight:bold; letter-spacing:1px; color:#888; margin-bottom:8px;">WHY IT WORKED (AND WHY IT SHOULDN'T HAVE)</div>
+        <ul style="list-style:none; font-size:13px; line-height:1.8; color:#444;">
+          <li>🕐 COVID timing: consumers craved Mediterranean escapism</li>
+          <li>🚚 Molson Coors' Carling distribution network — instant national scale</li>
+          <li>🥂 On-trade-first with mandatory branded chalice = premium perception</li>
+          <li>🎭 Character: <strong>the Chulapo</strong> (19th-century Madrid folk hero) — deliberate Baffo echo</li>
+          <li>🎨 Red packaging design echoing Moretti's visual codes</li>
+        </ul>
+      </div>
+    </div>
+    <div style="background:#FFF5F5; border:1px solid #FECACA; border-radius:10px; padding:16px; margin-bottom:12px;">
+      <div style="font-size:11px; font-weight:bold; letter-spacing:1px; color:#DC2626; margin-bottom:10px;">MADRI'S AUTHENTICITY VULNERABILITY — THE OPENING</div>
+      <div class="grid-2" style="margin-bottom:0;">
+        <div style="font-size:13px; line-height:1.7; color:#444;">
+          Pete Brown (beer writer): <em>"a completely manufactured and invented brand."</em><br/>
+          Sunday Times: <em>"the biggest illusion in British brewing history."</em><br/>
+          BeerAdvocate rating: <strong>2.91 / 5</strong> — near the bottom of the premium segment.<br/>
+          EUIPO trademark invalidity application filed: <strong>December 2025.</strong>
+        </div>
+        <div style="font-size:13px; line-height:1.7; color:#444;">
+          Estrella Galicia's MD publicly attacked Madri for using "a big famous city in Spain" despite not producing there: <em>"not very honest."</em><br/>
+          One reviewer: <em>"If you miss the taste of old Carlsberg, never fear — Madri fills that unenviable gap."</em><br/>
+          <strong>Media scrutiny is intensifying</strong> — FT, Telegraph, Sunday Times, BBC have all published exposés.
+        </div>
+      </div>
+    </div>
+    <div class="trend-row">
+      <span class="pill down">↓ Authentic credentials</span>
+      <span class="pill up">↑ Media scrutiny of provenance</span>
+      <span class="pill up">↑ Legal challenge (EUIPO)</span>
+      <span class="pill neutral">→ Consumers don't (yet) care</span>
+    </div>
+  </div>
+
+  <!-- PERONI + CORONA + GUINNESS ROW -->
+  <div class="grid-2" style="margin-bottom:20px;">
+    <div class="card" style="border-left:4px solid #D4A843;">
+      <div class="section-label" style="margin-bottom:8px;">ITALIAN RIVAL</div>
+      <h3>🇮🇹 Peroni Nastro Azzurro</h3>
+      <div style="font-size:12px; color:#888; margin-bottom:10px;">"Live Every Moment" · Owner: Asahi · Actually brewed in Italy ✓</div>
+      <ul style="list-style:none; font-size:13px; line-height:1.8; color:#444; margin-bottom:10px;">
+        <li>🏎️ F1 via Scuderia Ferrari — <strong>Lewis Hamilton + Charles Leclerc</strong> in March 2025 debut with McCann London</li>
+        <li>📊 YouGov quality score: <strong>+25</strong> — highest among all lager brands</li>
+        <li>👥 6th in UK popularity: 53% favourability</li>
+        <li>🍋 <strong>Stile Capri:</strong> 4.2% ABV, lemon-accented, €20M investment, targets 25–35-year-olds</li>
+        <li>✅ <strong>Genuine Italian provenance</strong> — an increasingly valuable asset as scrutiny grows</li>
+      </ul>
+      <div style="font-size:12px; color:#666; font-style:italic;">Moretti vs Peroni: urban chic vs warm rustic. Complementary, not directly conflicting. Peroni sells Italian glamour; Moretti sells Italian conviviality.</div>
+    </div>
+    <div class="card" style="border-left:4px solid #F59E0B;">
+      <div class="section-label" style="margin-bottom:8px; background:#F59E0B; color:#000;">OWNS RELAXATION</div>
+      <h3>🌊 Corona Extra</h3>
+      <div style="font-size:12px; color:#888; margin-bottom:10px;">"For Every Golden Moment" · Owner: AB InBev · World's most valuable beer brand (Kantar BrandZ 2024 + 2025)</div>
+      <ul style="list-style:none; font-size:13px; line-height:1.8; color:#444; margin-bottom:10px;">
+        <li>🏅 <strong>First-ever global beer sponsor of the Olympic Games</strong> (Paris 2024, extended to 2032) — Corona Cero triple-digit volume growth</li>
+        <li>🌞 2024 "Sunshine is Back" UK campaign: <strong>hollowed-out London billboards letting actual sunlight through</strong></li>
+        <li>🏄 2025 World Surf League partnership reinforces beach ownership</li>
+        <li>😎 UK: 2nd most popular mainstream beer (53% favourability)</li>
+      </ul>
+      <div style="font-size:12px; color:#DC2626; font-weight:bold;">⚠️ Route 1 risk: Corona owns "slowing down." Any Moretti slow-life execution must maintain hard distance from beach/relaxation territory.</div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:20px;">
+    <div class="card" style="border-left:4px solid #1A1A1A;">
+      <div class="section-label" style="margin-bottom:8px; background:#1A1A1A;">OWNS TOGETHERNESS</div>
+      <h3>🍺 Guinness</h3>
+      <div style="font-size:12px; color:#888; margin-bottom:10px;">Owner: Diageo · 11.8% on-trade market share (up from 8.2%)</div>
+      <ul style="list-style:none; font-size:13px; line-height:1.8; color:#444; margin-bottom:10px;">
+        <li>🔥 One in nine pints poured in the UK is a Guinness</li>
+        <li>📱 <strong>82% of 18–24-year-old stout drinkers are NEW to the category</strong> — driven by #SplitTheG on TikTok</li>
+        <li>❤️ 2025 "A Lovely Day" campaign by Uncommon Creative Studio: snapshots of everyday togetherness and connection</li>
+        <li>🍻 Deep cultural equity: the pub, the round, St. Patrick's gatherings</li>
+      </ul>
+      <div style="font-size:12px; color:#DC2626; font-weight:bold;">⚠️ Route 2 risk: Guinness aggressively owns togetherness. Moretti must differentiate through the specificity of the Italian table — not generic conviviality.</div>
+    </div>
+    <div class="card" style="border-left:4px solid #E30614;">
+      <div class="section-label" style="margin-bottom:8px; background:#E30614;">FOOD OCCASION RIVAL</div>
+      <h3>⭐ Stella Artois</h3>
+      <div style="font-size:12px; color:#888; margin-bottom:10px;">"Make Time for The Life Artois" · Owner: AB InBev · Directly competes for the dinner table</div>
+      <ul style="list-style:none; font-size:13px; line-height:1.8; color:#444; margin-bottom:10px;">
+        <li>🍽️ <strong>"Table Drop" campaign (2023) by Anomaly Toronto:</strong> Woman eating alone crashes through floors accumulating dinner companions — explicitly combating solitary eating</li>
+        <li>🏠 ~40% of business in on-premise restaurant dining</li>
+        <li>📉 YouGov quality perception declining: <strong>+19 vs Peroni's +25</strong> — younger consumers see Peroni as more upmarket</li>
+        <li>🔴 "Wife beater" reputation partially faded via ABV reduction (5.2% → 4.6%) + chalice + film festivals</li>
+      </ul>
+      <div style="background:#FFF5F5; border:1px solid #FECACA; border-radius:10px; padding:16px; margin-top:14px; margin-bottom:12px;">
+        <div style="font-size:11px; font-weight:bold; letter-spacing:1px; color:#DC2626; margin-bottom:12px;">RESEARCH AGENT — TRUSTPILOT UK (76 REVIEWS)</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div style="text-align:center; background:#fff; border-radius:8px; padding:12px;">
+            <div style="font-size:30px; font-weight:bold; color:#DC2626; line-height:1;">88%</div>
+            <div style="font-size:11px; color:#888; margin-top:4px;">1-star reviews</div>
+          </div>
+          <div style="text-align:center; background:#fff; border-radius:8px; padding:12px;">
+            <div style="font-size:30px; font-weight:bold; color:#D97706; line-height:1;">72%</div>
+            <div style="font-size:11px; color:#888; margin-top:4px;">cite ABV as reason to leave</div>
+          </div>
+          <div style="text-align:center; background:#fff; border-radius:8px; padding:12px;">
+            <div style="font-size:30px; font-weight:bold; color:#2563EB; line-height:1;">60%</div>
+            <div style="font-size:11px; color:#888; margin-top:4px;">switching to Spanish lagers</div>
+          </div>
+        </div>
+        <p style="font-size:12px; color:#555; line-height:1.6;">The 60% switching explicitly to San Miguel, Madri, and Cruzcampo reveals a critical gap: <strong>Stella's defectors are landing on Moretti's direct Spanish competitors, not on Moretti itself</strong>. Moretti's Italian table positioning — food-paired, heritage-led, genuinely Italian — is the strongest available differentiator from the Spanish lager cluster. But it has to be actively claimed.</p>
+      </div>
+      <div style="font-size:12px; color:#555; font-style:italic;">Most direct competitor for the dinner table. Moretti's Italian food credentials give it a more specific and culturally resonant claim.</div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:20px;">
+    <div class="card" style="border-left:4px solid #009B3A;">
+      <div class="section-label" style="margin-bottom:8px; background:#009B3A;">POPULAR BUT DISRUPTED</div>
+      <h3>🇪🇸 San Miguel</h3>
+      <div style="font-size:12px; color:#888; margin-bottom:10px;">Owner: AB InBev (from Jan 2025, prev. Carlsberg Marston's)</div>
+      <ul style="list-style:none; font-size:13px; line-height:1.8; color:#444; margin-bottom:10px;">
+        <li>🏆 <strong>#1 most popular beer brand in UK</strong> (YouGov: 61% favourability) — 8 points ahead of Corona</li>
+        <li>📉 Ownership transition caused disruption: <strong>lost £37.6M and 15.3M litres</strong> in most recent Grocer rankings</li>
+        <li>🌞 First campaign under new owners (April 2025): "Spanish Summer — No Matter When, Where, or How"</li>
+        <li>⚠️ Risk of deprioritisation in AB InBev's crowded portfolio (Stella, Bud, Corona)</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid #009A44;">
+      <div class="section-label" style="margin-bottom:8px; background:#009A44;">PARENT BRAND — PORTFOLIO CHESS</div>
+      <h3>🌿 Heineken (brand)</h3>
+      <div style="font-size:12px; color:#888; margin-bottom:10px;">Owns Moretti, Cruzcampo, Heineken 0.0</div>
+      <ul style="list-style:none; font-size:13px; line-height:1.8; color:#444; margin-bottom:10px;">
+        <li>🏆 <strong>#1 most creative alcoholic drinks brand, Cannes Lions 2024</strong> — "The Boring Phone" (flip phone to reduce smartphone distraction) generated 9.5 billion impressions</li>
+        <li>⚽ Champions League sponsorship lost after 2027 (replaced by AB InBev); F1 partnership renewed</li>
+        <li>🍺 <strong>Cruzcampo</strong> launched (£10M spend) as Heineken's Spanish lager weapon against Madri — keeps Moretti focused on Italian food territory</li>
+        <li>🍽️ Food occasions deliberately delegated to Moretti within the portfolio</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box opportunity">
+    <span class="icon">🎯</span>
+    <div><strong>The Whitespace:</strong> No competitor owns the emotional territory of <em>the Italian table as a place of genuine, rustic human warmth</em>. Mediterranean lifestyle is claimed by everyone. The specific Italian meal — long, multi-course, family-style, plates passed, conversation flowing — is Moretti's to own. This territory requires genuine Italian cultural credibility to pull off. Madri can't go there (Yorkshire-brewed). Peroni won't go there (fashion and F1). Corona won't go there (beach). Guinness won't go there (pub). <strong>The Italian table is Moretti's and Moretti's alone.</strong></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     CULTURAL TENSIONS
+════════════════════════════════════════════════════ -->
+<div id="panel-tensions" class="panel" role="tabpanel">
+  <div class="section-label">CULTURAL INTELLIGENCE</div>
+  <h2 class="section-title">Active Cultural Battlegrounds</h2>
+  <p class="section-sub">Tensions across social media that Birra Moretti must navigate — and can potentially own</p>
+
+  <!-- TENSION HEATMAP -->
+  <div class="chart-wrap" style="margin-bottom:32px;">
+    <div class="chart-title">Cultural Tension Severity Map — Moretti-Relevant Territories</div>
+    <canvas id="tensionChart" height="200" aria-label="Cultural tension severity chart" role="img"></canvas>
+  </div>
+
+  <!-- BATTLEGROUND 1: SLOW LIFE -->
+  <div class="battleground severity-high">
+    <div class="battleground-header">
+      <div>
+        <div class="platform-badges">
+          <span class="pbadge tiktok">TikTok</span>
+          <span class="pbadge reddit">Reddit</span>
+          <span class="pbadge twitter">Twitter/X</span>
+          <span class="pbadge instagram">Instagram</span>
+        </div>
+        <div class="battleground-title">Battleground 1: The Right to Slow Down</div>
+        <div style="font-size:13px; color:#888; margin-top:4px;">
+          Hustle Culture Backlash vs. Slow Living as Privilege · Connected to Creative Route 1
+        </div>
+      </div>
+      <div class="battleground-score">
+        <div class="num">8</div>
+        <div class="denom">/10</div>
+      </div>
+    </div>
+
+    <div class="battleground-desc">
+      There's a massive generational backlash against hustle culture underway — 76% of employees report burnout, Gen Z is actively rejecting "productivity anxiety," and #softlife has 10+ billion TikTok views. But a powerful counter-argument is emerging: slow living is a <strong>privilege of the economically secure</strong>. Those who can't afford to slow down — the majority globally — are increasingly calling this out.
+    </div>
+
+    <div class="versus-row">
+      <div class="side-a">
+        <div class="side-label">🕊️ PRO SLOW LIFE</div>
+        <p><em>"We're all burned out. 59% of global workers are quiet quitting. The world is too fast, too overwhelming. Taking back your pace isn't lazy — it's survival."</em></p>
+        <p style="margin-top:8px; font-size:12px; color:#666;">49% Gen Z prioritise work-life balance. #slowliving growing 250% search interest globally. r/antiwork: 2.7M+ members.</p>
+      </div>
+      <div class="vs-badge">VS</div>
+      <div class="side-b">
+        <div class="side-label">💸 PRIVILEGE COUNTER</div>
+        <p><em>"Slow living is a middle-class fantasy. Not everyone can choose 'quiet days' and WFH. This aesthetic is for people who don't have to worry about rent."</em></p>
+        <p style="margin-top:8px; font-size:12px; color:#888;">Working-class advocates note the irony: romanticising simplicity requires the luxury of financial stability first.</p>
+      </div>
+    </div>
+
+    <div class="info-box alert" style="margin-bottom:16px;">
+      <span class="icon">⚠️</span>
+      <div><strong>Regional Variation:</strong> This tension lands very differently by market. In Italy and Switzerland, slow living is culturally embedded and less fraught. In Romania, Brazil, Serbia, and the UK working class, it feels like privilege messaging. A "slow life" campaign needs market-specific calibration or risks alienating exactly the audiences it hopes to reach.</div>
+    </div>
+
+    <div class="do-dont">
+      <div class="do-panel">
+        <div class="panel-label">✅ DO — Safe Territory</div>
+        <ul>
+          <li>Position Moretti as enabling <em>small, accessible slow moments</em> — not an aspirational slow lifestyle</li>
+          <li>Focus on the specific ritual of the meal, not the broader philosophy of slowness</li>
+          <li>Show diverse tables — not just affluent, sun-drenched settings</li>
+          <li>Acknowledge that slowing down is hard — the beer is the reprieve, not the lifestyle</li>
+          <li>Ground in the Italian cultural truth: slow dining isn't a trend, it's a centuries-old practice</li>
+        </ul>
+      </div>
+      <div class="dont-panel">
+        <div class="panel-label">❌ DON'T — Risk Zone</div>
+        <ul>
+          <li>Don't romanticise "the slow life" as a whole lifestyle choice</li>
+          <li>Don't show exclusively affluent, leisured settings (Tuscan villas etc.)</li>
+          <li>Don't lecture about slowing down or wellness — brand arrogance risk</li>
+          <li>Don't ignore the privilege subtext — it will be called out</li>
+          <li>Don't make slowness the product benefit — make the <em>table connection</em> the benefit</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- BATTLEGROUND 2: CONVIVIALITY -->
+  <div class="battleground severity-high">
+    <div class="battleground-header">
+      <div>
+        <div class="platform-badges">
+          <span class="pbadge tiktok">TikTok</span>
+          <span class="pbadge reddit">Reddit</span>
+          <span class="pbadge instagram">Instagram</span>
+        </div>
+        <div class="battleground-title">Battleground 2: Forced Connection vs. Chosen Solitude</div>
+        <div style="font-size:13px; color:#888; margin-top:4px;">
+          Loneliness Epidemic Messaging vs. Introvert Rights · Connected to Creative Route 2
+        </div>
+      </div>
+      <div class="battleground-score">
+        <div class="num">7</div>
+        <div class="denom">/10</div>
+      </div>
+    </div>
+
+    <div class="battleground-desc">
+      The US Surgeon General declared loneliness an epidemic in 2023. 90% of Gen Z enjoy communal dining and 63% say it's great for meeting people. But there's a powerful pushback: <strong>forcing connection is its own kind of harm</strong>. Gen Z is also 3x more likely to identify as introverts, and nearly 50% choose to dine alone weekly — by choice. The risk: a brand that moralises about connection can feel preachy and exclusionary to those who prefer their own company.
+    </div>
+
+    <div class="versus-row">
+      <div class="side-a">
+        <div class="side-label">🤝 PRO CONNECTION</div>
+        <p><em>"Loneliness is a public health crisis. Countries where people share meals report lower depression, better health outcomes. We need to gather again. The dinner table is medicine."</em></p>
+        <p style="margin-top:8px; font-size:12px; color:#666;">Harvard research confirms: shared meals = stronger social support networks. Retro dinner party culture trending among Gen Z.</p>
+      </div>
+      <div class="vs-badge">VS</div>
+      <div class="side-b">
+        <div class="side-label">🧘 PRO SOLITUDE</div>
+        <p><em>"I eat alone by choice. It's not loneliness — it's self-care. Stop pathologising introversion. Not everyone needs to be at a communal table to feel connected."</em></p>
+        <p style="margin-top:8px; font-size:12px; color:#888;">73% of Gen Z report isolation yet 50% dine alone weekly. Solitude ≠ loneliness. Forced sociality causes its own harm.</p>
+      </div>
+    </div>
+
+    <div class="quote-block" style="margin-bottom:16px;">
+      <strong>Research Agent Signal (1,000+ TikTok items, 100 Reddit posts):</strong> The word "conviviality" appeared in our entire dataset exclusively within <em>vocabulary lesson and language-learning content</em> — never once in authentic social gathering, dining, or community contexts. People don't describe warmth and togetherness using that word. They show it. Any brand that tries to lecture audiences about "conviviality" is already operating in the wrong register.
+    </div>
+    <div class="info-box insight" style="margin-bottom:16px;">
+      <span class="icon">💡</span>
+      <div><strong>The Moretti Opportunity:</strong> This is actually Moretti's <strong>best creative territory</strong> — but only if it sidesteps the moral messaging. The brand shouldn't say "fight loneliness with our beer." Instead: show the warmth and generosity of the Italian table as irresistible and <em>optional</em>. The invitation, not the prescription. Moretti doesn't make you gather — it makes gathering better when you choose to.</div>
+    </div>
+
+    <div class="do-dont">
+      <div class="do-panel">
+        <div class="panel-label">✅ DO — Safe Territory</div>
+        <ul>
+          <li>Show genuine, unscripted moments of warmth at the table — not performative togetherness</li>
+          <li>Position the brand as the facilitator of <em>generosity</em>, not connection itself</li>
+          <li>Lean into Italian table culture: the refilling of glasses, the passing of dishes, the staying late</li>
+          <li>Show that the table welcomes everyone — whoever is there</li>
+          <li>Celebrate the specific rituals of shared eating that make it special</li>
+        </ul>
+      </div>
+      <div class="dont-panel">
+        <div class="panel-label">❌ DON'T — Risk Zone</div>
+        <ul>
+          <li>Don't make the brand about "solving loneliness" — it's preachy and patronising</li>
+          <li>Don't shame solo dining or the choice to be alone</li>
+          <li>Don't show forced group situations where everyone's performing connection</li>
+          <li>Don't use "we're all lonely" as the emotional hook — it's worn out</li>
+          <li>Don't show the picture-perfect Instagram dinner party — it reads as aspiration, not warmth</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- BATTLEGROUND 3: AUTHENTICITY -->
+  <div class="battleground severity-mid">
+    <div class="battleground-header">
+      <div>
+        <div class="platform-badges">
+          <span class="pbadge tiktok">TikTok</span>
+          <span class="pbadge twitter">Twitter/X</span>
+          <span class="pbadge reddit">Reddit</span>
+        </div>
+        <div class="battleground-title">Battleground 3: Genuine vs. Performed Authenticity</div>
+        <div style="font-size:13px; color:#888; margin-top:4px;">
+          Anti-Algorithm / De-influencing vs. Authenticity as New Aesthetic · Connected to Creative Route 3
+        </div>
+      </div>
+      <div class="battleground-score">
+        <div class="num">7</div>
+        <div class="denom">/10</div>
+      </div>
+    </div>
+
+    <div class="battleground-desc">
+      Gen Z is aggressively rejecting algorithm-optimised aesthetics — "beige rage," tired girl makeup, de-influencing, and anti-aesthetic movements all signal exhaustion with curated perfection. But here's the paradox: <strong>authenticity itself has become an aesthetic</strong>. De-influencing is now a monetised genre. Performing "realness" is the new status game. Any brand that tries to claim unpolished authenticity risks being called out as the most inauthentic move of all.
+    </div>
+
+    <div class="versus-row">
+      <div class="side-a">
+        <div class="side-label">📵 ANTI-ALGORITHM</div>
+        <p><em>"I'm so tired of everything looking the same. The curated feed, the perfect table setting, the same music. Give me something real, messy, actual."</em></p>
+        <p style="margin-top:8px; font-size:12px; color:#666;">Beige rage trend: rebellion against minimalist monotony. De-influencing movement: urging people NOT to buy. Search for "authentic content" exploding.</p>
+      </div>
+      <div class="vs-badge">VS</div>
+      <div class="side-b">
+        <div class="side-label">🎭 META-AUTHENTICITY CRITIQUE</div>
+        <p><em>"'Unfiltered authenticity' is just the new filter. Every brand now claims to be 'real.' It's all performance — even the performance of not performing."</em></p>
+        <p style="margin-top:8px; font-size:12px; color:#888;">TikTok now saturated with expertly produced "authentic" content. Audiences increasingly savvy about pseudo-authenticity. Cynicism growing.</p>
+      </div>
+    </div>
+
+    <div class="info-box alert" style="margin-bottom:16px;">
+      <span class="icon">⚠️</span>
+      <div><strong>Critical Warning for Moretti:</strong> Moretti's strongest authentic claim is its <em>age</em> — the same recipe since 1859, the same label icon for decades. This is <strong>genuine</strong> heritage, not performed. But if the brand tries to claim "unpolished real life" in its advertising while being a multinational Heineken brand, it will be seen through immediately. The safer play: let the product's actual history speak — don't try to be TikTok-authentic.</div>
+    </div>
+
+    <div class="do-dont">
+      <div class="do-panel">
+        <div class="panel-label">✅ DO — Safe Territory</div>
+        <ul>
+          <li>Lean into real, historic authenticity — the 1859 recipe, the unchanged label, the Italian roots</li>
+          <li>Show the everyday Italian table: messy, unfiltered, real — without announcing it's "authentic"</li>
+          <li>Use real people, real families, real meals — not models performing life</li>
+          <li>Trust the product's history to do the work — don't over-explain it</li>
+          <li>Be the brand that doesn't need to say it's real, because it demonstrably is</li>
+        </ul>
+      </div>
+      <div class="dont-panel">
+        <div class="panel-label">❌ DON'T — Risk Zone</div>
+        <ul>
+          <li>Don't use "authentic" or "real" in your copy — the very claim undermines itself</li>
+          <li>Don't create deliberately rough/grainy content to look anti-aesthetic — it's transparent</li>
+          <li>Don't try to compete with de-influencers or anti-algorithm creators</li>
+          <li>Don't ignore that you're a Heineken brand — some audiences know and will call it out</li>
+          <li>Don't make "rustic Italian" look like a set design choice</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     CREATIVE ROUTES
+════════════════════════════════════════════════════ -->
+<div id="panel-routes" class="panel" role="tabpanel">
+  <div class="section-label">CREATIVE STRATEGY</div>
+  <h2 class="section-title">Three Creative Route Assessment</h2>
+  <p class="section-sub">Cultural tension analysis, brand fit scoring, and strategic recommendation for each route</p>
+
+  <!-- ROUTE 2 — HIGHEST OPPORTUNITY -->
+  <div class="route-card">
+    <div class="route-header r2">
+      <div>
+        <div style="font-size:11px; letter-spacing:2px; opacity:0.7; margin-bottom:8px;">ROUTE 2 — RECOMMENDED</div>
+        <div class="route-title">Sharing, Generosity & Conviviality</div>
+        <div class="route-tagline">"In a world that's distrustful and distant — the table is where we're most ourselves"</div>
+      </div>
+      <div class="route-score-display">
+        <div class="big">8.4</div>
+        <div class="small">/10 Brand Opportunity</div>
+      </div>
+    </div>
+    <div class="route-body">
+      <div class="grid-2">
+        <div>
+          <div class="section-label" style="margin-bottom:10px;">WHY THIS ROUTE WINS</div>
+          <ul style="font-size:13px; line-height:2; list-style:none;">
+            <li>✅ <strong>Deepest cultural truth for Moretti:</strong> Italian dining culture genuinely centres the table as the place of warmth and generosity</li>
+            <li>✅ <strong>Enduring, not trend-dependent:</strong> The loneliness epidemic is a multi-year cultural shift, not a passing aesthetic</li>
+            <li>✅ <strong>Hardest to copy:</strong> Only a genuinely Italian brand with a heritage of table culture can credibly own this — San Miguel can't, Estrella can't</li>
+            <li>✅ <strong>Directly addresses the brand's stated goal:</strong> "Sharing a meal" as the #1 choice</li>
+            <li>✅ <strong>Works across all markets:</strong> The warmth of the table translates — from UK dinner parties to Brazilian churrascaria to Romanian family gatherings</li>
+            <li>✅ <strong>Low minefield risk:</strong> Avoids the privilege accusation of Route 1, avoids the inauthenticity trap of Route 3</li>
+          </ul>
+        </div>
+        <div>
+          <div class="section-label" style="margin-bottom:10px;">WHAT TO AVOID</div>
+          <ul style="font-size:13px; line-height:2; list-style:none; color:#555;">
+            <li>⚠️ Don't frame it as a solution to the loneliness epidemic — too literal</li>
+            <li>⚠️ Don't make it about the beer enabling connection — the <em>people</em> at the table create the warmth; the beer belongs there</li>
+            <li>⚠️ Don't cast exclusively young, photogenic urbanites — the Italian table is multigenerational, diverse</li>
+          </ul>
+          <div class="section-label" style="margin-bottom:10px; margin-top:16px;">POSSIBLE BRAND IDEA</div>
+          <div style="background:#F5F0E8; border-radius:10px; padding:16px; font-size:13px; line-height:1.7;">
+            <strong>"La Tavola" (The Table)</strong><br/>
+            Birra Moretti is the beer of the Italian table — not just the moment, but everything the table represents: generosity, warmth, time, the absence of clocks. The table is where Italians have always been most human. Now bring it to the world.
+          </div>
+        </div>
+      </div>
+      <div class="do-dont" style="margin-top:20px;">
+        <div class="do-panel">
+          <div class="panel-label">✅ CREATIVE SIGNALS THAT WORK</div>
+          <ul>
+            <li>The extra chair being pulled up without being asked</li>
+            <li>Pouring for someone else before yourself — the Italian instinct of generosity</li>
+            <li>The meal that was supposed to be quick but became three hours</li>
+            <li>The mismatched plates that mean more food was made</li>
+            <li>Old people and young people eating together — the multigenerational table</li>
+            <li>Laughter mid-sentence. Food passed before it's asked for.</li>
+          </ul>
+        </div>
+        <div class="dont-panel">
+          <div class="panel-label">❌ SIGNALS TO AVOID</div>
+          <ul>
+            <li>The perfectly art-directed Instagram dinner party</li>
+            <li>Beer as the hero — it should be part of the scene, not the focus</li>
+            <li>Explicit mentions of loneliness or isolation</li>
+            <li>Only showing close friends — acquaintances becoming friends at the table is more interesting</li>
+            <li>Any suggestion that the table requires a certain lifestyle to access</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROUTE 1 -->
+  <div class="route-card">
+    <div class="route-header r1">
+      <div>
+        <div style="font-size:11px; letter-spacing:2px; opacity:0.7; margin-bottom:8px;">ROUTE 1 — HIGH CULTURAL TENSION — PROCEED WITH CARE</div>
+        <div class="route-title">Appreciating the Slow Life</div>
+        <div class="route-tagline">"In a world that's too overwhelming and fast — make space for the things that matter"</div>
+      </div>
+      <div class="route-score-display">
+        <div class="big">6.2</div>
+        <div class="small">/10 Brand Opportunity</div>
+      </div>
+    </div>
+    <div class="route-body">
+      <div class="grid-2">
+        <div>
+          <div class="section-label" style="margin-bottom:10px;">THE OPPORTUNITY</div>
+          <p style="font-size:13px; line-height:1.7; margin-bottom:12px;">The anti-hustle sentiment is one of the most powerful cultural currents right now. Gen Z is explicitly rejecting productivity culture. Search interest in "slow living" grew 250% globally. Italy is the natural home of slow — <em>la dolce vita</em>, aperitivo, the Sunday lunch that takes all day. The brand could own this.</p>
+          <div class="section-label" style="margin-bottom:10px; margin-top:16px;">THE RISK</div>
+          <p style="font-size:13px; line-height:1.7; color:#555;">This is the most tense creative territory. "Slow living" is being challenged as a privilege of the economically comfortable — a criticism that will land hard in Romania, Serbia, Brazil, and working-class UK. The brand risks feeling tone-deaf to a significant portion of its audience. Additionally, slow life aesthetics are already crowded on TikTok and Instagram — Moretti would enter a very noisy space.</p>
+        </div>
+        <div>
+          <div class="section-label" style="margin-bottom:10px;">NARROW PATH TO SUCCESS</div>
+          <div style="background:#F5F0E8; border-radius:10px; padding:16px; font-size:13px; line-height:1.7;">
+            If pursuing Route 1, the brand must reframe "slow" as <strong>a single moment, not a lifestyle</strong>. Not "choose a slower life" but "here is one moment where everything can stop." The meal. The glass. The person across the table. That's accessible to everyone — regardless of income or circumstance. The Italian table offers a slow moment to anyone who sits at one.
+          </div>
+          <div class="section-label" style="margin-bottom:10px; margin-top:16px;">MARKET CALIBRATION NEEDED</div>
+          <div style="font-size:12px; line-height:1.8;">
+            🇬🇧 UK: Resonant for Gen Z and Millennial audiences<br/>
+            🇮🇹 Italy: Natural fit — culturally embedded<br/>
+            🇨🇭 Switzerland: Premium audiences will receive it well<br/>
+            🇷🇴 Romania / 🇷🇸 Serbia: <strong style="color:#DC2626;">HIGH RISK</strong> — avoid or reframe significantly<br/>
+            🇧🇷 Brazil: <strong style="color:#DC2626;">HIGH RISK</strong> — class inequality makes this fraught
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROUTE 3 -->
+  <div class="route-card">
+    <div class="route-header r3">
+      <div>
+        <div style="font-size:11px; letter-spacing:2px; opacity:0.7; margin-bottom:8px;">ROUTE 3 — NARROWEST BRAND FIT — REQUIRES CAREFUL EXECUTION</div>
+        <div class="route-title">Rustic, Unpolished Authenticity</div>
+        <div class="route-tagline">"In a world that's too focused on the algorithm and looking the same — be genuinely real"</div>
+      </div>
+      <div class="route-score-display">
+        <div class="big">5.8</div>
+        <div class="small">/10 Brand Opportunity</div>
+      </div>
+    </div>
+    <div class="route-body">
+      <div class="grid-2">
+        <div>
+          <div class="section-label" style="margin-bottom:10px;">WHAT'S REAL ABOUT THIS ROUTE</div>
+          <p style="font-size:13px; line-height:1.7; margin-bottom:12px;">Moretti genuinely has what this route requires: a recipe unchanged since 1859, a label that's been largely the same for decades, a connection to real Italian family and village life. The cultural desire for "real" over "curated" is powerful and growing. If any beer brand can credibly claim unpolished authenticity, it's Moretti.</p>
+          <div class="section-label" style="margin-bottom:10px; margin-top:16px;">THE FUNDAMENTAL PARADOX</div>
+          <p style="font-size:13px; line-height:1.7; color:#555;">Performing authenticity is the new inauthenticity. The de-influencing movement has made audiences radically cynical about any brand claiming "realness." A Heineken-owned brand making a campaign about being "not like the others" will be called out. The more the creative <em>tries</em> to look unpolished, the more it will read as polished artifice.</p>
+        </div>
+        <div>
+          <div class="section-label" style="margin-bottom:10px;">HOW TO MAKE IT WORK</div>
+          <div style="background:#F5F0E8; border-radius:10px; padding:16px; font-size:13px; line-height:1.7; margin-bottom:16px;">
+            The only way this works is if Moretti doesn't try to look authentic — it simply <em>is</em>. Showing actual Italian nonni making dinner. Real families at real tables. Not "rustic aesthetic," but the genuine texture of Italian life. The 1859 recipe doesn't need to be performed — it just needs to be stated as fact. Let the history do the work.
+          </div>
+          <div class="section-label" style="margin-bottom:10px;">UNIQUE BRAND ASSET</div>
+          <div style="font-size:13px; line-height:1.7;">
+            The mustachioed man on the label IS the authenticity marker. He's not a logo update — he's a real type. In a world of rebrand and refresh, Moretti's willingness to keep the same label for 100+ years is one of the most anti-algorithm things a brand can do. <strong>Don't modernise him. Let him be the proof.</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Strategic Recommendation Summary -->
+  <div class="big-insight">
+    <div class="pre">STRATEGIC RECOMMENDATION</div>
+    <h3>The Creative Routes aren't mutually exclusive — they converge at the table</h3>
+    <p style="margin-bottom:16px;">Route 2 (Sharing & Conviviality) is the primary territory — it's the most defensible, the most emotionally true, and the most directly aligned with the brand goal of owning "sharing a meal." But Routes 1 and 3 can be layered in: the table is where you slow down (Route 1), and everything about the table is real and unperformed (Route 3).</p>
+    <p>The unified brand idea might be: <strong style="color:var(--moretti-gold);">"The Italian Table" — the place where time stops, generosity flows, and nothing needs to be performed.</strong> This gives you slowness without privilege, connection without preachiness, and authenticity without artifice.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SOCIAL SIGNALS
+════════════════════════════════════════════════════ -->
+<div id="panel-social" class="panel" role="tabpanel">
+  <div class="section-label">LIVE SOCIAL INTELLIGENCE</div>
+  <h2 class="section-title">Social Media Signal — Relevant TikTok Content</h2>
+  <p class="section-sub">Real posts from the slow living / cozy / table connection territory — showing the cultural momentum</p>
+
+  <!-- Research Data Summary -->
+  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px;">
+    <div style="background:#fff; border-radius:12px; padding:16px; text-align:center; box-shadow:0 2px 12px rgba(0,0,0,0.06); border-top:3px solid #C41E3A;">
+      <div style="font-size:34px; font-weight:bold; color:#C41E3A; line-height:1;">0</div>
+      <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#888; margin-top:4px;">Moretti mentions in 1,000+ TikTok items</div>
+    </div>
+    <div style="background:#fff; border-radius:12px; padding:16px; text-align:center; box-shadow:0 2px 12px rgba(0,0,0,0.06); border-top:3px solid #C41E3A;">
+      <div style="font-size:34px; font-weight:bold; color:#C41E3A; line-height:1;">0</div>
+      <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#888; margin-top:4px;">Moretti mentions in 100 Reddit posts</div>
+    </div>
+    <div style="background:#fff; border-radius:12px; padding:16px; text-align:center; box-shadow:0 2px 12px rgba(0,0,0,0.06); border-top:3px solid #D4A843;">
+      <div style="font-size:34px; font-weight:bold; color:#B8860B; line-height:1;">10.2K</div>
+      <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#888; margin-top:4px;">TikTok plays — Italian communal dining</div>
+    </div>
+    <div style="background:#fff; border-radius:12px; padding:16px; text-align:center; box-shadow:0 2px 12px rgba(0,0,0,0.06); border-top:3px solid #2563EB;">
+      <div style="font-size:34px; font-weight:bold; color:#2563EB; line-height:1;">88%</div>
+      <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#888; margin-top:4px;">Stella 1-star reviews — category is in flux</div>
+    </div>
+  </div>
+
+  <div class="info-box insight" style="margin-bottom:24px;">
+    <span class="icon">📊</span>
+    <div><strong>What this tells us:</strong> The slow living aesthetic is generating massive organic content on TikTok — with posts in this category regularly reaching 100K–1.5M+ views. This isn't a niche movement; it's mainstream. UK creator @cosyvera is among the most engaged. The visual language of these posts (warm light, kitchens, still moments) maps directly onto the Italian table aesthetic Moretti could own.</div>
+  </div>
+
+  <div class="tiktok-grid">
+
+    <!-- TikTok 1 — High performer -->
+    <a class="tt-card" href="https://www.tiktok.com/@eklipsu/video/7372543149480086816" target="_blank" rel="noopener">
+      <img class="tt-thumb" src="https://p19-common-sign.tiktokcdn-us.com/tos-useast2a-p-0037-euttp/9f8e16ccea154cd8a5684928f5480fa9_1716553978~tplv-tiktokx-origin.image" alt="Slow living home aesthetic" loading="lazy" onerror="this.style.display='none'"/>
+      <div class="tt-body">
+        <div class="tt-meta">
+          <span class="tt-platform">TikTok</span>
+          <span class="tt-user">@eklipsu (Portugal→UK)</span>
+        </div>
+        <div class="tt-text">Soft girl aesthetic, slowliving, romanticize your life, home aesthetic — cozy living from Portugal-to-UK</div>
+        <div style="margin-bottom:8px;"><span class="pill neutral" style="font-size:10px;">Route 1: Slow Life</span></div>
+        <div class="tt-stats">
+          <span class="tt-stat">👁 1.5M views</span>
+          <span class="tt-stat">❤️ 182.5K likes</span>
+          <span class="tt-stat">💬 1,726 comments</span>
+          <span class="tt-stat">↗️ 7.3K shares</span>
+        </div>
+        <span class="tt-link">View on TikTok →</span>
+      </div>
+    </a>
+
+    <!-- TikTok 2 — Nature/slow -->
+    <a class="tt-card" href="https://www.tiktok.com/@another_cat_mommy/video/7236742817744194843" target="_blank" rel="noopener">
+      <img class="tt-thumb" src="https://p16-common-sign.tiktokcdn-us.com/tos-useast2a-p-0037-aiso/oIXE0BuRyJhD3uDuAFfhomzMCNAITsSIE2N3nw~tplv-tiktokx-origin.image" alt="Aesthetic slow nature" loading="lazy" onerror="this.style.display='none'"/>
+      <div class="tt-body">
+        <div class="tt-meta">
+          <span class="tt-platform">TikTok</span>
+          <span class="tt-user">@another_cat_mommy</span>
+        </div>
+        <div class="tt-text">Aesthetic nature, slow living, meditation, beautiful places, peaceful life — nature slowlife content</div>
+        <div style="margin-bottom:8px;"><span class="pill neutral" style="font-size:10px;">Route 1: Slow Life</span> <span class="pill neutral" style="font-size:10px;">Route 3: Authenticity</span></div>
+        <div class="tt-stats">
+          <span class="tt-stat">👁 896.2K views</span>
+          <span class="tt-stat">❤️ 25.3K likes</span>
+          <span class="tt-stat">💬 162 comments</span>
+          <span class="tt-stat">↗️ 8.6K shares</span>
+        </div>
+        <span class="tt-link">View on TikTok →</span>
+      </div>
+    </a>
+
+    <!-- TikTok 3 — UK cozy creator -->
+    <a class="tt-card" href="https://www.tiktok.com/@cosyvera/video/7606046269420752150" target="_blank" rel="noopener">
+      <img class="tt-thumb" src="https://p19-common-sign.tiktokcdn-us.com/tos-no1a-p-0037-no/oohzkFDTREF23IYhEOEE5nBAGBegsvWdjpfgj2~tplv-tiktokx-origin.image" alt="Cozy UK slow life" loading="lazy" onerror="this.style.display='none'"/>
+      <div class="tt-body">
+        <div class="tt-meta">
+          <span class="tt-platform">TikTok</span>
+          <span class="tt-user">@cosyvera 📍UK</span>
+          <span style="font-size:10px; background:#f0f0f0; padding:2px 6px; border-radius:3px;">UK CREATOR</span>
+        </div>
+        <div class="tt-text">"This & nowhere to be." #slowlife #cozyaesthetic — romantic heirloom nostalgia, cosy kitchen, cozy UK home</div>
+        <div style="margin-bottom:8px;"><span class="pill neutral" style="font-size:10px;">Route 1: Slow Life</span> <span class="pill neutral" style="font-size:10px;">Route 2: Table Connection</span></div>
+        <div class="tt-stats">
+          <span class="tt-stat">👁 175.5K views</span>
+          <span class="tt-stat">❤️ 40.6K likes</span>
+          <span class="tt-stat">💬 160 comments</span>
+          <span class="tt-stat">↗️ 1.4K shares</span>
+        </div>
+        <span class="tt-link">View on TikTok →</span>
+      </div>
+    </a>
+
+    <!-- TikTok 4 — Slow Sunday cottage -->
+    <a class="tt-card" href="https://www.tiktok.com/@lenas_cozy_cottage/video/7565549704168115478" target="_blank" rel="noopener">
+      <img class="tt-thumb" src="https://p16-common-sign.tiktokcdn-us.com/tos-no1a-p-0037-no/osxRfFDFQLDEUnoAfIAAQbMFPjeutQhr2zxjIO~tplv-tiktokx-origin.image" alt="Slow Sunday cozy cottage" loading="lazy" onerror="this.style.display='none'"/>
+      <div class="tt-body">
+        <div class="tt-meta">
+          <span class="tt-platform">TikTok</span>
+          <span class="tt-user">@lenas_cozy_cottage (74.2K followers)</span>
+        </div>
+        <div class="tt-text">Slow Sunday — cottage core, cozy corner, vintage style — 74K followers dedicated to slow cottage living</div>
+        <div style="margin-bottom:8px;"><span class="pill neutral" style="font-size:10px;">Route 1: Slow Life</span> <span class="pill neutral" style="font-size:10px;">Route 3: Authenticity</span></div>
+        <div class="tt-stats">
+          <span class="tt-stat">👁 66.3K views</span>
+          <span class="tt-stat">❤️ 7.9K likes</span>
+          <span class="tt-stat">💬 77 comments</span>
+          <span class="tt-stat">↗️ 517 shares</span>
+        </div>
+        <span class="tt-link">View on TikTok →</span>
+      </div>
+    </a>
+
+    <!-- TikTok 5 — Slow cottage days -->
+    <a class="tt-card" href="https://www.tiktok.com/@ana_explorando/video/7522269652899073335" target="_blank" rel="noopener">
+      <img class="tt-thumb" src="https://p19-common-sign.tiktokcdn-us.com/tos-useast5-p-0068-tx/oIvHIArsPkABuQQQDyW8HEACfelADGImjAMeIh~tplv-tiktokx-origin.image" alt="Slow cottage days" loading="lazy" onerror="this.style.display='none'"/>
+      <div class="tt-body">
+        <div class="tt-meta">
+          <span class="tt-platform">TikTok</span>
+          <span class="tt-user">@ana_explorando (21.4K followers)</span>
+        </div>
+        <div class="tt-text">Slow cottage days — cottagecore, slowliving, quiet life aesthetic</div>
+        <div style="margin-bottom:8px;"><span class="pill neutral" style="font-size:10px;">Route 1: Slow Life</span></div>
+        <div class="tt-stats">
+          <span class="tt-stat">👁 56.1K views</span>
+          <span class="tt-stat">❤️ 5.3K likes</span>
+          <span class="tt-stat">💬 53 comments</span>
+          <span class="tt-stat">↗️ 291 shares</span>
+        </div>
+        <span class="tt-link">View on TikTok →</span>
+      </div>
+    </a>
+
+    <!-- TikTok 6 — Mom slow living -->
+    <a class="tt-card" href="https://www.tiktok.com/@alllyheilig/video/7609511616547212575" target="_blank" rel="noopener">
+      <img class="tt-thumb" src="https://p16-common-sign.tiktokcdn-us.com/tos-useast8-p-0068-tx2/oIaAwBaZlAAjoiUAkiqtC5JEwEaAvBp34R7VI~tplv-tiktokx-origin.image" alt="Slow living as mom" loading="lazy" onerror="this.style.display='none'"/>
+      <div class="tt-body">
+        <div class="tt-meta">
+          <span class="tt-platform">TikTok</span>
+          <span class="tt-user">@alllyheilig</span>
+        </div>
+        <div class="tt-text">Slow living as a mom of littles — "A gentle life, on purpose." #slowliving #softlife #motherhood</div>
+        <div style="margin-bottom:8px;"><span class="pill neutral" style="font-size:10px;">Route 1: Slow Life</span> <span class="pill neutral" style="font-size:10px;">Route 2: Table Connection</span></div>
+        <div class="tt-stats">
+          <span class="tt-stat">👁 8.9K views</span>
+          <span class="tt-stat">❤️ 2.0K likes</span>
+          <span class="tt-stat">💬 3 comments</span>
+          <span class="tt-stat">↗️ 48 shares</span>
+        </div>
+        <span class="tt-link">View on TikTok →</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- Platform intelligence -->
+  <div class="grid-2" style="margin-top:32px;">
+    <div class="chart-wrap">
+      <div class="chart-title">Creative Route Cultural Relevance by Platform</div>
+      <canvas id="platformRouteChart" height="250" aria-label="Creative route relevance by platform" role="img"></canvas>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Slow Living Content Engagement — TikTok (views)</div>
+      <canvas id="ttEngagementChart" height="250" aria-label="TikTok slow living content engagement" role="img"></canvas>
+    </div>
+  </div>
+
+  <div class="info-box opportunity" style="margin-top:24px;">
+    <span class="icon">🎬</span>
+    <div><strong>Content Opportunity:</strong> The warm kitchen / cosy table aesthetic is the dominant visual language of slow living content on TikTok — particularly in the UK. Moretti's creative should live in this visual world but bring the specific warmth of the Italian table: the olive oil bottle, the wine glass next to the beer, the extra pasta, the bread being torn rather than sliced. Not "Italian aesthetic" — but <em>Italian table truth</em>.</div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<footer>
+  <strong>Birra Moretti — Cultural Intelligence Report</strong> · Produced by Uncommon · March 2026<br/>
+  Data sources: IWSR · CGA · Morning Advertiser · Mintel · Euromonitor · TikTok API · Social Media Intelligence · Academic Research
+</footer>
+
+<script>
+// Tab state: preserve scroll positions
+const tabScrollPositions = {};
+let currentTab = 'q1';
+
+function showTab(name, clickedEl) {
+  // Save current scroll position for the tab we're leaving
+  tabScrollPositions[currentTab] = window.scrollY;
+
+  // Switch panels
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-selected', 'false');
+  });
+
+  const panel = document.getElementById('panel-' + name);
+  if (panel) panel.classList.add('active');
+
+  // Find and activate the correct tab button
+  const tabBtn = document.querySelector('.tab-btn[aria-controls="panel-' + name + '"]');
+  if (tabBtn) {
+    tabBtn.classList.add('active');
+    tabBtn.setAttribute('aria-selected', 'true');
+  }
+
+  // Update URL hash without scrolling
+  history.replaceState(null, '', '#' + name);
+  currentTab = name;
+
+  // Restore scroll position for this tab, or scroll to top
+  const savedPos = tabScrollPositions[name];
+  window.scrollTo(0, savedPos || 0);
+}
+
+// Load tab from URL hash on page load
+document.addEventListener('DOMContentLoaded', function() {
+  const hash = window.location.hash.replace('#', '');
+  if (hash && document.getElementById('panel-' + hash)) {
+    showTab(hash);
+  }
+});
+
+// Keyboard navigation for tabs (arrow keys)
+document.addEventListener('keydown', function(e) {
+  const tabs = Array.from(document.querySelectorAll('.tab-btn'));
+  const focused = document.activeElement;
+  const idx = tabs.indexOf(focused);
+  if (idx === -1) return;
+
+  if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+    e.preventDefault();
+    const next = e.key === 'ArrowRight'
+      ? tabs[(idx + 1) % tabs.length]
+      : tabs[(idx - 1 + tabs.length) % tabs.length];
+    next.focus();
+    next.click();
+  }
+});
+
+// Number formatter
+function fmt(n) {
+  if (n >= 1e6) return (n/1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return (n/1e3).toFixed(0) + 'K';
+  return n.toString();
+}
+
+// ── Chart 1: UK Beer Trends
+new Chart(document.getElementById('ukTrendsChart'), {
+  type: 'bar',
+  data: {
+    labels: ['World Lager', 'Stout', 'No/Low', 'Craft Stout', 'Prem. Draught', 'Craft Lager', 'Prem. Lager', 'Craft Ale', 'Budweiser'],
+    datasets: [{
+      label: '% Volume Change',
+      data: [11, 15, 20, 121.7, 10, -6.5, -10.4, -6.2, -5],
+      backgroundColor: d => d.raw > 0 ? 'rgba(196,30,58,0.8)' : 'rgba(100,100,100,0.6)',
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { color: '#F0EDE8' }, ticks: { callback: v => v + '%' } },
+      y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+    }
+  }
+});
+
+// ── Chart 2: Consumer Behaviour
+new Chart(document.getElementById('ukConsumerChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Drinking Less / Better', 'Seeking Provenance', 'Moderation/No-Low', 'Premium Trading Up', 'Cost-Conscious'],
+    datasets: [{
+      data: [35, 41, 53, 28, 25],
+      backgroundColor: ['#C41E3A', '#D4A843', '#2563EB', '#16A34A', '#9CA3AF'],
+    }]
+  },
+  options: {
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 12 } }
+    }
+  }
+});
+
+// ── Chart 3: Brand Radar
+new Chart(document.getElementById('brandRadarChart'), {
+  type: 'radar',
+  data: {
+    labels: ['Food Pairing', 'Heritage Auth.', 'UK Market Lead', 'Brand Warmth', 'Global Awareness', 'No/Low Range', 'Premium Feel'],
+    datasets: [
+      {
+        label: 'Birra Moretti',
+        data: [9, 9, 9, 8.5, 7, 5, 8],
+        backgroundColor: 'rgba(196,30,58,0.15)',
+        borderColor: '#C41E3A',
+        pointBackgroundColor: '#C41E3A',
+        pointRadius: 4,
+      },
+      {
+        label: 'Peroni',
+        data: [6.5, 6, 7, 6, 9, 8, 8.5],
+        backgroundColor: 'rgba(212,168,67,0.1)',
+        borderColor: '#D4A843',
+        pointBackgroundColor: '#D4A843',
+        pointRadius: 4,
+      }
+    ]
+  },
+  options: {
+    scales: {
+      r: {
+        beginAtZero: true, max: 10,
+        ticks: { font: { size: 10 }, stepSize: 2 },
+        pointLabels: { font: { size: 11 } }
+      }
+    },
+    plugins: { legend: { position: 'bottom', labels: { font: { size: 12 } } } }
+  }
+});
+
+// ── Chart 4: Competitive Landscape (bubble)
+new Chart(document.getElementById('competitiveChart'), {
+  type: 'bubble',
+  data: {
+    datasets: [
+      { label: 'Birra Moretti', data: [{ x: 8, y: 9, r: 20 }], backgroundColor: 'rgba(196,30,58,0.8)' },
+      { label: 'Peroni', data: [{ x: 7, y: 6, r: 16 }], backgroundColor: 'rgba(212,168,67,0.8)' },
+      { label: 'San Miguel', data: [{ x: 6, y: 7, r: 14 }], backgroundColor: 'rgba(37,99,235,0.7)' },
+      { label: 'Estrella', data: [{ x: 5.5, y: 7.5, r: 12 }], backgroundColor: 'rgba(22,163,74,0.7)' },
+      { label: 'Asahi', data: [{ x: 7, y: 4, r: 10 }], backgroundColor: 'rgba(100,100,100,0.6)' },
+    ]
+  },
+  options: {
+    scales: {
+      x: { min: 3, max: 10, title: { display: true, text: 'Premium Positioning →', font: { size: 11 } } },
+      y: { min: 2, max: 10, title: { display: true, text: 'Authenticity Perception →', font: { size: 11 } } }
+    },
+    plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } }
+  }
+});
+
+// ── Chart 5: Tension Severity
+new Chart(document.getElementById('tensionChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Battleground 1: Right to Slow Down', 'Battleground 2: Connection vs Solitude', 'Battleground 3: Real vs Performed Auth.'],
+    datasets: [{
+      label: 'Tension Severity',
+      data: [8, 7, 7],
+      backgroundColor: ['#DC2626', '#F59E0B', '#F59E0B'],
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { min: 0, max: 10, grid: { color: '#F0EDE8' }, ticks: { callback: v => v + '/10' } },
+      y: { grid: { display: false }, ticks: { font: { size: 12 } } }
+    }
+  }
+});
+
+// ── Chart 6: Platform x Route
+new Chart(document.getElementById('platformRouteChart'), {
+  type: 'bar',
+  data: {
+    labels: ['TikTok', 'Instagram', 'Twitter/X', 'Reddit', 'LinkedIn'],
+    datasets: [
+      { label: 'Route 1 (Slow Life)', data: [9, 8, 5, 7, 4], backgroundColor: 'rgba(45,106,79,0.8)', borderRadius: 4 },
+      { label: 'Route 2 (Conviviality)', data: [7, 8, 6, 8, 5], backgroundColor: 'rgba(139,69,19,0.8)', borderRadius: 4 },
+      { label: 'Route 3 (Authenticity)', data: [8, 6, 9, 7, 3], backgroundColor: 'rgba(74,25,66,0.8)', borderRadius: 4 },
+    ]
+  },
+  options: {
+    plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } },
+    scales: {
+      x: { grid: { display: false } },
+      y: { max: 10, ticks: { callback: v => v + '/10' }, grid: { color: '#F0EDE8' } }
+    }
+  }
+});
+
+// ── Chart 7: TikTok engagement
+new Chart(document.getElementById('ttEngagementChart'), {
+  type: 'bar',
+  data: {
+    labels: ['@eklipsu', '@another_cat_mommy', '@cosyvera (UK)', '@lenas_cozy_cottage', '@ana_explorando', '@alllyheilig'],
+    datasets: [{
+      label: 'Views',
+      data: [1500000, 896200, 175500, 66300, 56100, 8907],
+      backgroundColor: [
+        'rgba(196,30,58,0.85)', 'rgba(196,30,58,0.7)', 'rgba(196,30,58,0.85)',
+        'rgba(196,30,58,0.5)', 'rgba(196,30,58,0.45)', 'rgba(196,30,58,0.35)'
+      ],
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ticks: { callback: v => fmt(v) }, grid: { color: '#F0EDE8' } },
+      y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+    }
+  }
+});
+</script>
+</body>
+</html>
